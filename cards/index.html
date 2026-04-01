@@ -530,6 +530,10 @@
       .topbar{ padding:8px 12px; gap:8px; }
       .currency{ font-size:12px; }
       .record-panel{ right:12px; left:12px; width:auto; bottom:70px; }
+      .collection-panel{ right:12px; left:12px; width:auto; bottom:70px; }
+      .collection-grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); padding:14px; gap:10px; }
+      .collection-btn{ right:12px; bottom:max(128px, calc(env(safe-area-inset-bottom) + 128px)); min-width:120px; padding:12px 16px; }
+      .new-badge{ top:max(18px, env(safe-area-inset-top)); left:max(18px, env(safe-area-inset-left)); font-size:18px; padding:8px 14px; }
       .card-name{ font-size:clamp(18px, 5vw, 28px); }
       .quote-layer .quote-box{ font-size:clamp(18px, 4.8vw, 28px); }
       .skip-tip{ font-size:13px; }
@@ -540,8 +544,8 @@
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="currency">金幣　159萬</div>
-      <div class="currency">鑽石　587890</div>
+      <div class="currency" id="goldText">金幣　159萬</div>
+      <div class="currency" id="gemText">鑽石　587890</div>
     </div>
 
     <div class="pool-tabs" id="poolTabs"></div>
@@ -568,6 +572,7 @@
     </div>
 
     <button class="record-btn" id="recordBtn">抽卡紀錄</button>
+    <button class="collection-btn" id="collectionBtn">卡片圖鑑</button>
 
     <div class="record-panel" id="recordPanel">
       <div class="record-head">
@@ -575,6 +580,14 @@
         <button class="record-close" id="recordClose">✕</button>
       </div>
       <div class="record-list" id="recordList"></div>
+    </div>
+
+    <div class="collection-panel" id="collectionPanel">
+      <div class="record-head">
+        <span>卡片圖鑑 <span id="collectionCount"></span></span>
+        <button class="record-close" id="collectionClose">✕</button>
+      </div>
+      <div class="collection-grid" id="collectionGrid"></div>
     </div>
   </div>
 
@@ -603,6 +616,8 @@
       <div class="card-holder" id="cardHolder">
         <img id="cardImage" alt="card" />
       </div>
+
+      <div class="new-badge" id="newBadge" style="display:none;">NEW</div>
 
       <div class="nameplate" id="nameplate">
         <div class="stars-row" id="starsRow"></div>
@@ -728,10 +743,17 @@
     const heroRotator = document.getElementById('heroRotator');
     const drawOneBtn = document.getElementById('drawOneBtn');
     const drawTenBtn = document.getElementById('drawTenBtn');
+    const goldText = document.getElementById('goldText');
+    const gemText = document.getElementById('gemText');
     const recordBtn = document.getElementById('recordBtn');
     const recordPanel = document.getElementById('recordPanel');
     const recordClose = document.getElementById('recordClose');
     const recordList = document.getElementById('recordList');
+    const collectionBtn = document.getElementById('collectionBtn');
+    const collectionPanel = document.getElementById('collectionPanel');
+    const collectionClose = document.getElementById('collectionClose');
+    const collectionGrid = document.getElementById('collectionGrid');
+    const collectionCount = document.getElementById('collectionCount');
 
     const videoOverlay = document.getElementById('videoOverlay');
     const videoWrap = document.getElementById('videoWrap');
@@ -747,6 +769,7 @@
     const quoteText = document.getElementById('quoteText');
     const cardHolder = document.getElementById('cardHolder');
     const cardImage = document.getElementById('cardImage');
+    const newBadge = document.getElementById('newBadge');
     const nameplate = document.getElementById('nameplate');
     const starsRow = document.getElementById('starsRow');
     const cardName = document.getElementById('cardName');
@@ -764,6 +787,13 @@
     let currentPhaseTimers = [];
     let skipTapCount = 0;
     let historyRecords = [];
+    let ownedCards = new Set();
+    let currentCardIsNew = false;
+    let gold = 1590000;
+    let gems = 587890;
+
+    const DRAW_COST = { 1:350, 10:3500 };
+    const RARITY_RATE = { 3:0.9, 4:0.09, 5:0.01 };
 
     function asset(path){
       return encodeURI(path);
@@ -822,8 +852,8 @@
 
     function weightedRarity(){
       const r = Math.random();
-      if(r < 0.03) return 5;
-      if(r < 0.20) return 4;
+      if(r < RARITY_RATE[5]) return 5;
+      if(r < RARITY_RATE[5] + RARITY_RATE[4]) return 4;
       return 3;
     }
 
@@ -844,12 +874,42 @@
         else card = randomFrom(threes);
         output.push(structuredClone(card));
       }
+
+      if(count === 10 && !output.some(card => card.rarity >= 4)){
+        const replaceIndex = Math.floor(Math.random() * output.length);
+        output[replaceIndex] = structuredClone(randomFrom(fours));
+      }
+
       return output;
+    }
+
+    function formatGold(value){
+      if(value >= 10000){
+        const wan = Math.floor(value / 10000);
+        return `${wan}萬`;
+      }
+      return `${value}`;
+    }
+
+    function renderCurrency(){
+      goldText.textContent = `金幣　${formatGold(gold)}`;
+      gemText.textContent = `鑽石　${gems}`;
+    }
+
+    function spendGems(cost){
+      if(gems < cost) return false;
+      gems -= cost;
+      renderCurrency();
+      return true;
     }
 
     async function startDraw(count){
       if(busy) return;
+      const cost = DRAW_COST[count];
+      if(!spendGems(cost)) return;
       busy = true;
+      recordPanel.classList.remove('show');
+      collectionPanel.classList.remove('show');
       pendingCards = rollCards(count);
       revealIndex = 0;
       await playDrawVideo();
@@ -878,6 +938,8 @@
       cardHolder.style.transform = 'scale(.93)';
       starsRow.innerHTML = '';
       cardName.textContent = '';
+      newBadge.classList.remove('show');
+      newBadge.style.display = 'none';
     }
 
     function openRevealOverlay(){
@@ -934,7 +996,10 @@
     async function revealCardAtIndex(index){
       resetRevealState();
       const card = pendingCards[index];
+      currentCardIsNew = !ownedCards.has(card.id);
       pushHistory(card);
+      ownedCards.add(card.id);
+      renderCollection();
 
       if(card.rarity < 5){
         await revealNormalCard(card);
@@ -1019,6 +1084,10 @@
         starsRow.appendChild(img);
       }
       nameplate.classList.add('show');
+      if(currentCardIsNew){
+        newBadge.style.display = 'block';
+        newBadge.classList.add('show');
+      }
       const starItems = [...starsRow.querySelectorAll('.star-item')];
       starItems.forEach((item, idx) => {
         const t = setTimeout(() => item.classList.add('show'), idx * 140);
@@ -1052,6 +1121,26 @@
       `).join('');
     }
 
+    function renderCollection(){
+      collectionCount.textContent = `（${ownedCards.size}/${ALL_CARDS.length}）`;
+      collectionGrid.innerHTML = ALL_CARDS.map(card => {
+        const owned = ownedCards.has(card.id);
+        const stars = Array.from({ length: card.rarity }, () => `<img src="${asset(STAR_ASSET[card.rarity])}" alt="star">`).join('');
+        return `
+          <div class="collection-card ${owned ? '' : 'locked'}">
+            <span class="collection-owned-tag">${owned ? '已取得' : '未取得'}</span>
+            <img src="${asset(card.file)}" alt="${card.character} ${card.title}">
+            ${owned ? '' : '<div class="locked-mark">LOCK</div>'}
+            <div class="collection-meta">
+              <div class="collection-stars">${stars}</div>
+              <div class="collection-title">${card.character}．${card.title}</div>
+              <div class="collection-file">${card.file}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function advanceReveal(){
       if(!busy || !canAdvance) return;
       canAdvance = false;
@@ -1068,10 +1157,20 @@
     drawTenBtn.addEventListener('click', () => startDraw(10));
     revealStage.addEventListener('click', advanceReveal);
 
-    recordBtn.addEventListener('click', () => recordPanel.classList.toggle('show'));
+    recordBtn.addEventListener('click', () => {
+      collectionPanel.classList.remove('show');
+      recordPanel.classList.toggle('show');
+    });
     recordClose.addEventListener('click', () => recordPanel.classList.remove('show'));
+    collectionBtn.addEventListener('click', () => {
+      recordPanel.classList.remove('show');
+      collectionPanel.classList.toggle('show');
+    });
+    collectionClose.addEventListener('click', () => collectionPanel.classList.remove('show'));
 
+    renderCurrency();
     renderHistory();
+    renderCollection();
     renderPool();
 
     window.addEventListener('beforeunload', () => clearInterval(heroTimer));
