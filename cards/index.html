@@ -1,1179 +1,746 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>花夢十五夜｜抽卡</title>
-  <style>
-    :root{
-      --bg1:#2a1327;
-      --bg2:#10060e;
-      --pink:#f7b7d5;
-      --pink2:#ffdaea;
-      --deep-pink:#a13e6a;
-      --deep-pink-2:#6b2348;
-      --gold:#ffd76d;
-      --white:#fff;
-      --shadow:0 0 10px rgba(255,255,255,.25), 0 0 22px rgba(208,93,152,.22);
-      --stroke:
-        -1px -1px 0 var(--deep-pink),
-         1px -1px 0 var(--deep-pink),
-        -1px  1px 0 var(--deep-pink),
-         1px  1px 0 var(--deep-pink),
-         0    0   8px rgba(255,204,230,.28);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>花夢十五夜｜抽卡</title>
+<style>
+  :root{
+    --bg:#f2d8df;
+    --panel:#ffffffd9;
+    --panel-soft:#fff6fae8;
+    --pink:#efb8c3;
+    --pink-2:#f7c9d2;
+    --pink-3:#e88ea5;
+    --pink-4:#d86b8a;
+    --rose:#c96b88;
+    --deep:#7a4563;
+    --deep-2:#5f3d55;
+    --purple:#7874aa;
+    --purple-2:#616091;
+    --gold:#ffd85a;
+    --gold-2:#ffefb0;
+    --shadow:0 16px 40px rgba(118,63,96,.18);
+    --text-shadow:0 2px 7px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.85);
+    --stroke:
+      -1px -1px 0 rgba(194,111,137,.9),
+       1px -1px 0 rgba(194,111,137,.9),
+      -1px  1px 0 rgba(194,111,137,.9),
+       1px  1px 0 rgba(194,111,137,.9),
+       0 0 16px rgba(255,255,255,.55);
+  }
 
-    *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    html,body{ margin:0; width:100%; height:100%; overflow:hidden; font-family:"Noto Serif TC","Microsoft JhengHei",serif; }
-    body{
-      background:
-        radial-gradient(circle at top, rgba(255,192,217,.13), transparent 35%),
-        linear-gradient(135deg, #2f1730 0%, #190917 46%, #0b050b 100%);
-      color:#fff;
-    }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:"Noto Serif TC","Microsoft JhengHei",serif;background:var(--bg);}
+  body{
+    background:
+      radial-gradient(circle at 18% 20%, rgba(255,255,255,.65), transparent 22%),
+      radial-gradient(circle at 70% 80%, rgba(255,255,255,.28), transparent 28%),
+      linear-gradient(180deg,#f7e6eb 0%, #eed5dc 100%);
+    color:#fff;
+  }
 
-    .app{
-      position:relative;
-      width:100vw;
-      height:100vh;
-      overflow:hidden;
-    }
+  button{font:inherit}
+  .app{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .bg-ornament,
+  .bg-ornament::before,
+  .bg-ornament::after{
+    content:"";position:absolute;border-radius:50%;pointer-events:none;
+  }
+  .bg-ornament{inset:auto auto -22vh -8vw;width:48vw;height:48vw;background:rgba(255,255,255,.35);filter:blur(0px);z-index:0}
+  .bg-ornament::before{left:18vw;top:-8vh;width:18vw;height:18vw;background:rgba(255,255,255,.18)}
+  .bg-ornament::after{right:-68vw;top:-24vh;width:42vw;height:42vw;background:rgba(255,255,255,.22)}
 
-    .topbar{
-      position:absolute;
-      top:max(14px, env(safe-area-inset-top));
-      right:max(14px, env(safe-area-inset-right));
-      z-index:20;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:10px 16px;
-      border:2px solid rgba(255,214,234,.7);
-      border-radius:999px;
-      background:rgba(33,10,26,.55);
-      box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 0 18px rgba(255,214,234,.08);
-      backdrop-filter:blur(12px);
-    }
-    .currency{
-      font-size:clamp(12px, 1.4vw, 18px);
-      letter-spacing:.06em;
-      text-shadow:var(--stroke);
-      white-space:nowrap;
-    }
+  .hud-top{position:absolute;top:max(10px, env(safe-area-inset-top));right:max(14px, env(safe-area-inset-right));display:flex;gap:14px;z-index:20}
+  .currency-box{
+    min-width:170px;height:54px;padding:0 18px 0 12px;border-radius:12px;
+    background:linear-gradient(180deg,#6770a8,#4e527d);box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.22);
+    display:flex;align-items:center;gap:12px;position:relative;
+  }
+  .currency-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:#f4d25f;color:#8a6820;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
+  .currency-icon.diamond{background:linear-gradient(180deg,#8ff2ff,#3cb7e1);color:#ffffff;font-size:15px}
+  .currency-value{font-size:clamp(18px,2vw,28px);font-weight:800;letter-spacing:.02em;text-shadow:0 2px 4px rgba(0,0,0,.22)}
+  .currency-plus{
+    position:absolute;right:-12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;
+    display:grid;place-items:center;background:#fff;color:#c95b6e;font-size:28px;line-height:1;font-weight:700;
+    box-shadow:0 10px 24px rgba(94,58,83,.24), inset 0 0 0 2px rgba(201,91,110,.18);
+  }
 
-    .pool-tabs{
-      position:absolute;
-      top:max(18px, env(safe-area-inset-top));
-      left:max(18px, env(safe-area-inset-left));
-      z-index:20;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      max-width:min(72vw, 980px);
-    }
-    .pool-tab{
-      border:2px solid rgba(255,234,245,.9);
-      background:linear-gradient(180deg, rgba(255,210,230,.25), rgba(120,31,75,.36));
-      color:#fff;
-      padding:10px 16px;
-      border-radius:999px;
-      font-size:clamp(12px, 1.3vw, 17px);
-      cursor:pointer;
-      box-shadow:0 6px 18px rgba(0,0,0,.22);
-      text-shadow:var(--stroke);
-      transition:.18s ease;
-    }
-    .pool-tab.active{
-      transform:translateY(-1px) scale(1.02);
-      background:linear-gradient(180deg, rgba(255,226,238,.48), rgba(177,51,101,.55));
-      box-shadow:0 0 0 2px rgba(255,244,249,.35) inset, 0 10px 26px rgba(212,92,148,.28);
-    }
+  .pool-nav{position:absolute;left:max(18px, env(safe-area-inset-left));top:max(92px, calc(env(safe-area-inset-top) + 84px));width:min(26vw, 430px);display:flex;flex-direction:column;gap:18px;z-index:12}
+  .pool-btn{
+    position:relative;height:min(11vh,122px);border:0;background:none;padding:0;cursor:pointer;filter:drop-shadow(0 10px 20px rgba(122,69,99,.16));
+    transform-origin:left center;transition:transform .18s ease, filter .18s ease;
+  }
+  .pool-btn:hover{transform:translateX(2px)}
+  .pool-btn:active{transform:translateX(6px) scale(.98)}
+  .pool-btn .shape{
+    position:absolute;inset:0;background:linear-gradient(180deg,#f7d0d5,#efb7c2);clip-path:polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
+    box-shadow:inset 0 0 0 3px rgba(255,255,255,.55);
+  }
+  .pool-btn .shape::after{
+    content:"";position:absolute;inset:8px 24px 8px 14px;clip-path:polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
+    background:linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.15));
+  }
+  .pool-btn.active .shape{background:linear-gradient(180deg,#f6dfe4,#f3bdc8)}
+  .pool-btn.active{transform:translateX(14px)}
+  .pool-btn.active .shape::before{
+    content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,255,255,.46), transparent 42%);
+    clip-path:polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
+  }
+  .pool-btn .label{
+    position:absolute;inset:0;display:flex;align-items:center;padding-left:28px;padding-right:58px;
+    font-size:clamp(24px,2.6vw,66px);font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:var(--stroke);white-space:nowrap;
+  }
 
-    .main-stage{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:90px 18px 110px;
-    }
+  .main-stage{position:absolute;inset:0;padding:22px 22px 22px min(28vw, 450px);z-index:2}
+  .stage-card{
+    position:relative;width:100%;height:100%;border-radius:0;overflow:hidden;background:transparent;box-shadow:none;
+  }
+  .hero-wrap{position:absolute;inset:72px 26px 18px 18px;overflow:hidden;border-radius:0}
+  .hero-media{position:absolute;inset:0;background:#edd7dd}
+  .hero-media img{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;width:auto;min-width:100%;object-fit:cover;object-position:center center;
+    opacity:0;transition:opacity .65s ease, transform 6s ease;
+    filter:none;
+  }
+  .hero-media img.active{opacity:1;transform:translate(-50%,-50%) scale(1.02)}
+  .hero-soft-left,
+  .hero-soft-right,
+  .hero-soft-top,
+  .hero-pink-flare{position:absolute;pointer-events:none;z-index:2}
+  .hero-soft-left{left:0;top:0;bottom:0;width:26%;background:linear-gradient(90deg, rgba(255,255,255,.88), rgba(255,255,255,.56), transparent 88%)}
+  .hero-soft-right{right:0;top:0;bottom:0;width:18%;background:linear-gradient(270deg, rgba(255,255,255,.56), transparent 74%)}
+  .hero-soft-top{inset:0;background:linear-gradient(180deg, rgba(255,255,255,.1), transparent 25%, transparent 74%, rgba(0,0,0,.04))}
+  .hero-pink-flare{left:33%;top:3%;width:14%;height:26%;background:radial-gradient(circle, rgba(255,172,190,.52), rgba(255,172,190,.12) 42%, transparent 72%)}
 
-    .pool-stage{
-      position:relative;
-      width:min(92vw, 1680px);
-      height:min(78vh, calc(92vw * 0.5625));
-      min-height:320px;
-      border-radius:28px;
-      overflow:hidden;
-      background:#160812;
-      border:1px solid rgba(255,218,235,.35);
-      box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 0 40px rgba(255,206,228,.08);
-      isolation:isolate;
-    }
+  .headline{position:absolute;left:7%;top:12%;z-index:4;max-width:32%}
+  .headline .title{font-size:clamp(42px,4.5vw,90px);font-weight:900;letter-spacing:.08em;text-shadow:var(--text-shadow), var(--stroke);color:#fff;white-space:nowrap}
+  .headline .desc{margin-top:14px;font-size:clamp(16px,1.5vw,28px);line-height:1.8;color:#fff;text-shadow:0 2px 6px rgba(255,255,255,.85), 0 0 2px rgba(196,96,129,.62)}
+  .hero-tip{position:absolute;left:29%;top:8%;right:18%;z-index:4;text-align:center;font-size:clamp(22px,2.1vw,48px);font-weight:900;letter-spacing:.04em;color:#fff;text-shadow:var(--text-shadow), var(--stroke)}
 
-    .pool-bg{
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255,192,216,.18), transparent 24%),
-        radial-gradient(circle at 80% 20%, rgba(255,237,244,.12), transparent 22%),
-        radial-gradient(circle at 70% 75%, rgba(213,104,159,.18), transparent 24%),
-        linear-gradient(135deg, rgba(255,226,239,.14), rgba(74,16,44,.05) 38%, rgba(11,4,10,.26));
-      z-index:0;
-    }
+  .side-actions{position:absolute;right:2.6%;top:16%;display:flex;flex-direction:column;gap:18px;z-index:5}
+  .side-btn{
+    min-width:min(16vw, 250px);height:min(12vh,130px);padding:0 28px;border:0;border-radius:28px;cursor:pointer;
+    background:linear-gradient(180deg,#726fa5,#5f5e8f);box-shadow:0 12px 26px rgba(107,81,110,.22), inset 0 0 0 3px rgba(207,207,255,.26);
+    color:#fff;font-size:clamp(24px,2.2vw,58px);font-weight:900;letter-spacing:.08em;text-shadow:0 3px 8px rgba(0,0,0,.22);transition:transform .18s ease, filter .18s ease;
+  }
+  .side-btn:active{transform:scale(.98)}
 
-    .hero-rotator{
-      position:absolute;
-      inset:0;
-      z-index:1;
-    }
-    .hero-slide{
-      position:absolute;
-      inset:0;
-      opacity:0;
-      transform:scale(1.04);
-      transition:opacity .8s ease, transform 4.5s ease;
-      background:#130710 center center / cover no-repeat;
-    }
-    .hero-slide::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(90deg, rgba(10,4,8,.7) 0%, rgba(10,4,8,.28) 33%, rgba(10,4,8,.45) 100%),
-        linear-gradient(0deg, rgba(10,4,8,.78) 0%, rgba(10,4,8,.18) 34%, rgba(10,4,8,.04) 60%);
-    }
-    .hero-slide.active{ opacity:1; transform:scale(1); }
+  .summon-actions{position:absolute;right:8%;bottom:6%;display:flex;gap:min(4vw,54px);z-index:5}
+  .summon-btn{
+    width:min(20vw, 360px);height:min(17vh,200px);padding-top:8px;border-radius:32px;border:4px solid rgba(226,110,129,.85);cursor:pointer;
+    background:linear-gradient(180deg,#f8e7ea,#f4c3cb);box-shadow:0 14px 30px rgba(123,77,94,.18), inset 0 0 0 4px rgba(255,255,255,.55);
+    color:#e16a73;text-shadow:0 2px 0 rgba(255,255,255,.8), 0 3px 10px rgba(255,255,255,.7);transition:transform .18s ease, filter .18s ease;
+  }
+  .summon-btn:hover{transform:translateY(-2px)}
+  .summon-btn:active{transform:translateY(1px) scale(.98)}
+  .summon-main{font-size:clamp(34px,3.6vw,84px);font-weight:900;letter-spacing:.06em;line-height:1.05}
+  .summon-sub{margin-top:8px;font-size:clamp(18px,1.5vw,30px);font-weight:900}
 
-    .pool-info{
-      position:absolute;
-      left:clamp(20px, 3vw, 44px);
-      bottom:clamp(18px, 3vw, 38px);
-      z-index:3;
-      max-width:min(62%, 680px);
-    }
-    .pool-name{
-      font-size:clamp(28px, 4vw, 64px);
-      margin:0 0 10px;
-      letter-spacing:.14em;
-      text-shadow:var(--stroke), 0 8px 30px rgba(0,0,0,.4);
-      font-weight:700;
-    }
-    .pool-desc{
-      margin:0;
-      font-size:clamp(14px, 1.4vw, 22px);
-      line-height:1.85;
-      color:#fff9fc;
-      text-shadow:0 2px 8px rgba(0,0,0,.6);
-    }
+  .record-panel{
+    position:absolute;right:18px;top:18px;z-index:40;width:min(40vw, 460px);max-height:min(72vh, 820px);display:none;flex-direction:column;
+    background:rgba(255,248,251,.96);border-radius:24px;box-shadow:0 24px 60px rgba(95,61,85,.28);overflow:hidden;color:#70495e;
+  }
+  .record-panel.open{display:flex}
+  .record-head{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#f7d1d9,#efbdc9);color:#fff;text-shadow:var(--stroke);font-size:clamp(20px,1.4vw,30px);font-weight:900}
+  .record-close{border:0;background:#fff;color:#c56b89;width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer}
+  .record-list{padding:12px 16px 18px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+  .record-item{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:#fff;box-shadow:0 8px 20px rgba(104,72,93,.08)}
+  .record-item .rarity{min-width:52px;font-weight:900;color:#a06a82}
+  .record-item.ssr .rarity,.record-item.ssr .name{color:#d49c00}
+  .record-item .name{font-weight:800}
+  .record-item .time{margin-left:auto;font-size:12px;opacity:.55;white-space:nowrap}
 
-    .draw-actions{
-      position:absolute;
-      right:clamp(18px, 3vw, 38px);
-      bottom:clamp(18px, 3vw, 38px);
-      z-index:4;
-      display:flex;
-      gap:14px;
-      align-items:flex-end;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+  .overlay{position:absolute;inset:0;display:none;z-index:90}
+  .overlay.show{display:block}
+  .video-overlay{background:#000}
+  .video-overlay video{width:100%;height:100%;object-fit:cover;background:#000}
+  .skip-tip{position:absolute;right:20px;bottom:20px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-size:14px;letter-spacing:.08em}
 
-    .draw-btn{
-      position:relative;
-      min-width:150px;
-      padding:16px 22px 14px;
-      border:3px solid var(--deep-pink);
-      outline:2px solid rgba(255,255,255,.75);
-      outline-offset:-7px;
-      border-radius:20px;
-      background:linear-gradient(180deg, #efb0cf 0%, #d97cab 100%);
-      color:#fff;
-      cursor:pointer;
-      box-shadow:0 12px 26px rgba(0,0,0,.32), inset 0 0 12px rgba(255,255,255,.18);
-      transition:.18s ease;
-    }
-    .draw-btn:hover{ transform:translateY(-2px) scale(1.01); }
-    .draw-btn:active{ transform:translateY(0) scale(.99); }
-    .draw-label{
-      display:block;
-      font-size:clamp(19px, 2vw, 30px);
-      letter-spacing:.08em;
-      text-shadow:var(--stroke);
-      font-weight:700;
-      line-height:1.05;
-    }
-    .draw-cost{
-      display:block;
-      margin-top:6px;
-      font-size:clamp(12px, 1.2vw, 16px);
-      opacity:.96;
-      text-shadow:var(--stroke);
-      letter-spacing:.06em;
-    }
+  .reveal-overlay{background:#000;cursor:pointer}
+  .reveal-stage{position:absolute;inset:0;overflow:hidden;background:#000}
+  .reveal-bg,
+  .reveal-main,
+  .reveal-zoom{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+  .reveal-bg{width:100%;height:100%;object-fit:cover;display:none}
+  .reveal-main{height:100%;width:auto;min-width:100%;display:none;object-fit:cover;object-position:center center}
+  .reveal-zoom{height:100%;width:auto;min-width:100%;display:none;object-fit:cover;object-position:center center}
+  .reveal-whiteflash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+  .reveal-quote{position:absolute;inset:0;display:none;place-items:center;padding:10vw;color:#fff;text-align:center;background:rgba(0,0,0,.18)}
+  .reveal-quote .quote-box{max-width:min(72vw, 1000px)}
+  .quote-line{font-size:clamp(28px,3vw,62px);line-height:1.7;font-weight:700;text-shadow:0 4px 18px rgba(0,0,0,.45)}
+  .reveal-ui{position:absolute;left:max(18px, env(safe-area-inset-left));bottom:max(16px, env(safe-area-inset-bottom));z-index:2;color:#fff;text-shadow:var(--stroke)}
+  .new-tag{display:none;margin-bottom:8px;font-size:clamp(18px,2vw,34px);font-weight:900;color:var(--gold);text-shadow:0 0 10px rgba(255,221,123,.55), -1px -1px 0 rgba(143,97,25,.86), 1px -1px 0 rgba(143,97,25,.86), -1px 1px 0 rgba(143,97,25,.86), 1px 1px 0 rgba(143,97,25,.86)}
+  .star-row{display:flex;gap:10px;align-items:flex-end;min-height:44px}
+  .star-row img{width:clamp(26px,2.3vw,42px);height:auto;opacity:0;transform:scale(.4)}
+  .card-name{margin-top:8px;font-size:clamp(28px,3vw,56px);font-weight:900;letter-spacing:.04em;color:#fff;white-space:pre-line}
+  .tap-tip{position:absolute;right:max(18px, env(safe-area-inset-right));bottom:max(16px, env(safe-area-inset-bottom));z-index:2;font-size:clamp(16px,1.2vw,24px);color:#fff;text-shadow:var(--stroke)}
 
-    .record-btn{
-      position:absolute;
-      right:max(18px, env(safe-area-inset-right));
-      bottom:max(18px, env(safe-area-inset-bottom));
-      z-index:20;
-      padding:12px 16px;
-      border-radius:16px;
-      border:2px solid rgba(255,239,246,.85);
-      background:rgba(81,20,52,.75);
-      color:#fff;
-      text-shadow:var(--stroke);
-      cursor:pointer;
-      font-size:clamp(13px, 1.2vw, 16px);
-      box-shadow:0 10px 24px rgba(0,0,0,.32);
-    }
+  .dialog-overlay{position:absolute;inset:0;display:none;z-index:95;background:rgba(0,0,0,.35)}
+  .dialog-overlay.show{display:grid;place-items:center}
+  .dialog-box{width:min(90vw, 540px);padding:26px 24px;border-radius:24px;background:#fff6f8;color:#71485d;box-shadow:0 24px 60px rgba(90,56,77,.26);text-align:center}
+  .dialog-title{font-size:28px;font-weight:900;color:#c46a87}
+  .dialog-text{margin-top:10px;font-size:20px;line-height:1.7}
+  .dialog-btn{margin-top:18px;border:0;border-radius:16px;background:linear-gradient(180deg,#f6d1da,#efbcc8);padding:14px 28px;color:#fff;font-size:22px;font-weight:900;cursor:pointer;box-shadow:0 10px 26px rgba(99,61,82,.16)}
 
-    .overlay{
-      position:fixed;
-      inset:0;
-      z-index:100;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background:rgba(7,2,6,.92);
-    }
-    .overlay.show{ display:flex; }
+  .catalog-overlay{position:absolute;inset:0;display:none;z-index:70;background:rgba(245,226,232,.96);backdrop-filter:blur(12px)}
+  .catalog-overlay.open{display:flex;flex-direction:column}
+  .catalog-head{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#f7d1d9,#efbdc9);color:#fff;text-shadow:var(--stroke);font-size:clamp(22px,1.6vw,34px);font-weight:900}
+  .catalog-body{padding:18px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px}
+  .catalog-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 12px 28px rgba(95,61,85,.12);position:relative}
+  .catalog-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center center;background:#ebd8dd}
+  .catalog-info{padding:12px 12px 14px;color:#754b5e}
+  .catalog-name{font-size:15px;font-weight:800;line-height:1.45}
+  .catalog-rarity{margin-top:4px;font-size:13px;font-weight:700;color:#bc748f}
+  .catalog-card.locked img{filter:grayscale(1) brightness(.8)}
+  .catalog-lock{position:absolute;inset:0;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4);background:rgba(110,78,95,.18)}
 
-    .video-overlay{ flex-direction:column; }
-    .video-wrap{
-      position:relative;
-      width:100vw;
-      height:100vh;
-      background:#000;
-      overflow:hidden;
-    }
-    .video-wrap video{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      background:#000;
-    }
-    .skip-tip{
-      position:absolute;
-      left:50%;
-      bottom:max(24px, env(safe-area-inset-bottom));
-      transform:translateX(-50%);
-      color:#fff;
-      text-shadow:var(--stroke);
-      font-size:clamp(13px, 1.2vw, 18px);
-      letter-spacing:.1em;
-      opacity:.9;
-      pointer-events:none;
-    }
+  @keyframes whiteFlash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+  @keyframes cardSettle{0%{transform:translate(-50%,-50%) scale(1.12)}100%{transform:translate(-50%,-50%) scale(1)}}
+  @keyframes starPop{0%{opacity:0;transform:scale(.3)}60%{opacity:1;transform:scale(1.24)}100%{opacity:1;transform:scale(1)}}
+  @keyframes quoteFade{0%{opacity:0}100%{opacity:1}}
 
-    .reveal-overlay{
-      background:
-        radial-gradient(circle at center, rgba(255,214,233,.12), transparent 26%),
-        linear-gradient(180deg, rgba(22,7,18,.98), rgba(5,2,5,.98));
-      flex-direction:column;
-      overflow:hidden;
-    }
-
-    .reveal-stage{
-      position:relative;
-      width:100vw;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      user-select:none;
-    }
-
-    .flash-layer,
-    .spotlight,
-    .quote-layer,
-    .card-holder,
-    .nameplate,
-    .tap-tip{
-      position:absolute;
-    }
-
-    .flash-layer{
-      inset:0;
-      background:#fff;
-      opacity:0;
-      pointer-events:none;
-      z-index:1;
-    }
-    .flash-layer.active{
-      animation:flashFade .72s ease forwards;
-    }
-    @keyframes flashFade{
-      0%{opacity:0;}
-      20%{opacity:1;}
-      100%{opacity:0;}
-    }
-
-    .quote-layer{
-      inset:0;
-      z-index:3;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:6vw;
-      background:rgba(0,0,0,.22);
-    }
-    .quote-layer.show{ display:flex; }
-    .quote-layer .bk-bg{
-      position:absolute;
-      inset:0;
-      background:center center / cover no-repeat;
-      transform:scale(1.02);
-      filter:brightness(.6);
-    }
-    .quote-layer .quote-box{
-      position:relative;
-      z-index:1;
-      max-width:min(80vw, 1100px);
-      font-size:clamp(22px, 3vw, 48px);
-      line-height:1.9;
-      letter-spacing:.08em;
-      color:#fff;
-      text-shadow:0 0 16px rgba(0,0,0,.7), var(--stroke);
-      padding:30px;
-    }
-
-    .spotlight{
-      inset:0;
-      z-index:4;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      pointer-events:none;
-      background:rgba(0,0,0,.16);
-    }
-    .spotlight.show{ display:flex; }
-    .spotlight-frame{
-      width:min(90vw, 1600px);
-      aspect-ratio:16/9;
-      border-radius:24px;
-      overflow:hidden;
-      box-shadow:0 0 0 2px rgba(255,240,246,.34), 0 25px 80px rgba(0,0,0,.55);
-      position:relative;
-      background:#000;
-    }
-    .spotlight-frame img,
-    .card-holder img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      display:block;
-    }
-
-    .card-holder{
-      z-index:5;
-      width:min(92vw, 1700px);
-      aspect-ratio:16/9;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      opacity:0;
-      transform:scale(.93);
-      transition:opacity .28s ease, transform .28s ease;
-    }
-    .card-holder.show{
-      opacity:1;
-      transform:scale(1);
-    }
-    .card-holder.card-normal img{
-      filter:drop-shadow(0 18px 42px rgba(0,0,0,.45));
-    }
-    .card-holder.card-normal.pop-in{
-      animation:normalCardReveal 1.1s cubic-bezier(.18,.86,.28,1) forwards;
-    }
-    @keyframes normalCardReveal{
-      0%{ transform:scale(1.15); opacity:0; }
-      18%{ transform:scale(1.12); opacity:1; }
-      100%{ transform:scale(1); opacity:1; }
-    }
-    .card-holder.card-five img{
-      filter:drop-shadow(0 20px 54px rgba(0,0,0,.5));
-    }
-
-    .nameplate{
-      left:max(18px, env(safe-area-inset-left));
-      bottom:max(22px, env(safe-area-inset-bottom));
-      z-index:7;
-      opacity:0;
-      transform:translateY(20px);
-      transition:.25s ease;
-      pointer-events:none;
-    }
-    .nameplate.show{ opacity:1; transform:translateY(0); }
-    .stars-row{
-      display:flex;
-      gap:10px;
-      margin-bottom:10px;
-      align-items:center;
-      min-height:40px;
-    }
-    .star-item{
-      width:clamp(22px, 2.3vw, 38px);
-      height:auto;
-      opacity:0;
-      transform:scale(.4);
-      filter:drop-shadow(0 3px 9px rgba(0,0,0,.35));
-    }
-    .star-item.show{
-      animation:starPop .35s ease forwards;
-    }
-    @keyframes starPop{
-      0%{ opacity:0; transform:scale(.4); }
-      68%{ opacity:1; transform:scale(1.18); }
-      100%{ opacity:1; transform:scale(1); }
-    }
-    .card-name{
-      font-size:clamp(22px, 2.6vw, 44px);
-      line-height:1.25;
-      color:#fff;
-      text-shadow:var(--stroke), 0 6px 18px rgba(0,0,0,.55);
-      white-space:pre-line;
-    }
-
-    .tap-tip{
-      right:max(20px, env(safe-area-inset-right));
-      bottom:max(22px, env(safe-area-inset-bottom));
-      z-index:7;
-      color:#fff;
-      font-size:clamp(13px, 1.3vw, 18px);
-      text-shadow:var(--stroke);
-      letter-spacing:.08em;
-      opacity:.86;
-      animation:blink 1.2s ease infinite;
-    }
-    @keyframes blink{ 0%,100%{opacity:.35;} 50%{opacity:1;} }
-
-    .record-panel{
-      position:fixed;
-      right:max(18px, env(safe-area-inset-right));
-      bottom:74px;
-      z-index:40;
-      width:min(92vw, 420px);
-      max-height:min(72vh, 720px);
-      display:none;
-      flex-direction:column;
-      border-radius:20px;
-      overflow:hidden;
-      border:1px solid rgba(255,234,245,.45);
-      background:rgba(18,6,13,.94);
-      box-shadow:0 20px 56px rgba(0,0,0,.45);
-      backdrop-filter:blur(12px);
-    }
-    .record-panel.show{ display:flex; }
-    .record-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 18px;
-      border-bottom:1px solid rgba(255,223,238,.16);
-      font-size:18px;
-      text-shadow:var(--stroke);
-    }
-    .record-close{
-      background:none;
-      border:none;
-      color:#fff;
-      font-size:24px;
-      cursor:pointer;
-      line-height:1;
-    }
-    .record-list{
-      overflow:auto;
-      padding:10px 14px 16px;
-    }
-    .record-item{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding:10px 8px;
-      border-bottom:1px solid rgba(255,245,250,.08);
-      font-size:15px;
-      line-height:1.5;
-    }
-    .record-item .left{
-      display:flex;
-      gap:10px;
-      min-width:0;
-      align-items:flex-start;
-    }
-    .record-rarity{ min-width:28px; text-align:center; }
-    .record-name{ word-break:break-all; }
-    .record-five .record-name,
-    .record-five .record-rarity,
-    .record-five .record-time{ color:var(--gold); }
-    .record-time{ opacity:.86; font-size:13px; white-space:nowrap; }
-
-    @media (max-width: 980px){
-      .main-stage{ padding-top:118px; }
-      .pool-stage{ height:min(64vh, calc(92vw * 0.75)); }
-      .pool-info{ max-width:70%; }
-      .draw-actions{ width:calc(100% - 36px); justify-content:flex-end; }
-      .draw-btn{ min-width:136px; }
-    }
-
-    @media (max-width: 720px){
-      .pool-tabs{ max-width:calc(100vw - 36px); gap:8px; }
-      .pool-stage{ width:94vw; height:min(62vh, 68vw); min-height:280px; border-radius:24px; }
-      .pool-info{ max-width:100%; right:18px; bottom:108px; }
-      .pool-name{ font-size:clamp(24px, 7vw, 40px); }
-      .pool-desc{ font-size:13px; line-height:1.7; }
-      .draw-actions{ left:18px; right:18px; bottom:18px; width:auto; justify-content:space-between; gap:10px; }
-      .draw-btn{ flex:1 1 0; min-width:0; padding:14px 12px 12px; border-radius:18px; }
-      .topbar{ padding:8px 12px; gap:8px; }
-      .currency{ font-size:12px; }
-      .record-panel{ right:12px; left:12px; width:auto; bottom:70px; }
-      .collection-panel{ right:12px; left:12px; width:auto; bottom:70px; }
-      .collection-grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); padding:14px; gap:10px; }
-      .collection-btn{ right:12px; bottom:max(128px, calc(env(safe-area-inset-bottom) + 128px)); min-width:120px; padding:12px 16px; }
-      .new-badge{ top:max(18px, env(safe-area-inset-top)); left:max(18px, env(safe-area-inset-left)); font-size:18px; padding:8px 14px; }
-      .card-name{ font-size:clamp(18px, 5vw, 28px); }
-      .quote-layer .quote-box{ font-size:clamp(18px, 4.8vw, 28px); }
-      .skip-tip{ font-size:13px; }
-      .tap-tip{ left:50%; right:auto; transform:translateX(-50%); bottom:max(14px, env(safe-area-inset-bottom)); }
-    }
-  </style>
+  @media (max-aspect-ratio: 1/1){
+    .hud-top{gap:10px;right:10px;top:max(8px, env(safe-area-inset-top))}
+    .currency-box{min-width:138px;height:42px;padding:0 14px 0 10px}
+    .currency-icon{width:22px;height:22px;font-size:13px}
+    .currency-value{font-size:20px}
+    .currency-plus{width:28px;height:28px;font-size:22px;right:-9px}
+    .pool-nav{top:max(60px, calc(env(safe-area-inset-top) + 56px));left:10px;width:34vw;gap:10px}
+    .pool-btn{height:9.2vh}
+    .pool-btn .label{padding-left:16px;padding-right:28px;font-size:clamp(16px,4vw,28px)}
+    .main-stage{padding:8px 8px 8px 34vw}
+    .hero-wrap{inset:52px 8px 8px 6px}
+    .headline{left:8%;top:13%;max-width:46%}
+    .headline .title{font-size:clamp(24px,7vw,42px)}
+    .headline .desc{font-size:clamp(10px,2.5vw,14px);line-height:1.55}
+    .hero-tip{left:24%;right:12%;top:6%;font-size:clamp(11px,2.6vw,16px)}
+    .side-actions{right:4%;top:10%;gap:10px}
+    .side-btn{min-width:24vw;height:7.8vh;padding:0 14px;border-radius:16px;font-size:clamp(14px,4vw,22px)}
+    .summon-actions{right:5%;left:auto;bottom:7%;gap:10px;flex-direction:column}
+    .summon-btn{width:min(40vw, 220px);height:11.5vh;border-radius:18px;border-width:3px}
+    .summon-main{font-size:clamp(20px,7vw,34px)}
+    .summon-sub{font-size:clamp(11px,3vw,14px)}
+    .record-panel{right:8px;top:8px;width:min(86vw, 360px);max-height:76vh}
+    .quote-line{font-size:clamp(20px,5vw,32px)}
+    .card-name{font-size:clamp(22px,6vw,34px)}
+  }
+</style>
 </head>
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="currency" id="goldText">金幣　159萬</div>
-      <div class="currency" id="gemText">鑽石　587890</div>
+<div class="app">
+  <div class="bg-ornament"></div>
+
+  <div class="hud-top">
+    <div class="currency-box">
+      <div class="currency-icon">●</div>
+      <div class="currency-value" id="goldValue">159萬</div>
+      <div class="currency-plus">+</div>
     </div>
-
-    <div class="pool-tabs" id="poolTabs"></div>
-
-    <div class="main-stage">
-      <div class="pool-stage">
-        <div class="pool-bg"></div>
-        <div class="hero-rotator" id="heroRotator"></div>
-        <div class="pool-info">
-          <h1 class="pool-name" id="poolName"></h1>
-          <p class="pool-desc" id="poolDesc"></p>
-        </div>
-        <div class="draw-actions">
-          <button class="draw-btn" id="drawOneBtn">
-            <span class="draw-label">1抽</span>
-            <span class="draw-cost">消耗 350 鑽</span>
-          </button>
-          <button class="draw-btn" id="drawTenBtn">
-            <span class="draw-label">10抽</span>
-            <span class="draw-cost">消耗 3500 鑽</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <button class="record-btn" id="recordBtn">抽卡紀錄</button>
-    <button class="collection-btn" id="collectionBtn">卡片圖鑑</button>
-
-    <div class="record-panel" id="recordPanel">
-      <div class="record-head">
-        <span>抽卡紀錄</span>
-        <button class="record-close" id="recordClose">✕</button>
-      </div>
-      <div class="record-list" id="recordList"></div>
-    </div>
-
-    <div class="collection-panel" id="collectionPanel">
-      <div class="record-head">
-        <span>卡片圖鑑 <span id="collectionCount"></span></span>
-        <button class="record-close" id="collectionClose">✕</button>
-      </div>
-      <div class="collection-grid" id="collectionGrid"></div>
+    <div class="currency-box">
+      <div class="currency-icon diamond">💎</div>
+      <div class="currency-value" id="diamondValue">587890</div>
+      <div class="currency-plus">+</div>
     </div>
   </div>
 
+  <div class="pool-nav" id="poolNav"></div>
+
+  <main class="main-stage">
+    <section class="stage-card">
+      <div class="hero-wrap">
+        <div class="hero-media" id="heroMedia"></div>
+        <div class="hero-soft-left"></div>
+        <div class="hero-soft-right"></div>
+        <div class="hero-soft-top"></div>
+        <div class="hero-pink-flare"></div>
+
+        <div class="headline">
+          <div class="title" id="poolTitle"></div>
+          <div class="desc" id="poolDesc"></div>
+        </div>
+
+        <div class="hero-tip" id="poolTip"></div>
+
+        <div class="side-actions">
+          <button class="side-btn" id="recordBtn">抽卡紀錄</button>
+          <button class="side-btn" id="catalogBtn">卡片圖鑑</button>
+        </div>
+
+        <div class="summon-actions">
+          <button class="summon-btn" data-draw="1">
+            <div class="summon-main">召喚一次</div>
+            <div class="summon-sub">消耗350鑽石</div>
+          </button>
+          <button class="summon-btn" data-draw="10">
+            <div class="summon-main">召喚十次</div>
+            <div class="summon-sub">消耗3500鑽石</div>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="record-panel" id="recordPanel">
+    <div class="record-head">抽卡紀錄 <button class="record-close" id="recordClose">×</button></div>
+    <div class="record-list" id="recordList"></div>
+  </aside>
+
+  <div class="catalog-overlay" id="catalogOverlay">
+    <div class="catalog-head">卡片圖鑑 <button class="record-close" id="catalogClose">×</button></div>
+    <div class="catalog-body" id="catalogBody"></div>
+  </div>
+
   <div class="overlay video-overlay" id="videoOverlay">
-    <div class="video-wrap" id="videoWrap">
-      <video id="introVideo" playsinline preload="auto" src="VIDEO.MP4"></video>
-      <div class="skip-tip">連點兩下可跳過</div>
-    </div>
+    <video id="gachaVideo" src="VIDEO.MP4" playsinline webkit-playsinline preload="auto"></video>
+    <div class="skip-tip">連點兩下跳過</div>
   </div>
 
   <div class="overlay reveal-overlay" id="revealOverlay">
     <div class="reveal-stage" id="revealStage">
-      <div class="flash-layer" id="flashLayer"></div>
-
-      <div class="quote-layer" id="quoteLayer">
-        <div class="bk-bg" id="bkBg"></div>
-        <div class="quote-box" id="quoteText"></div>
-      </div>
-
-      <div class="spotlight" id="spotlight">
-        <div class="spotlight-frame">
-          <img id="spotlightImage" alt="card spotlight" />
-        </div>
-      </div>
-
-      <div class="card-holder" id="cardHolder">
-        <img id="cardImage" alt="card" />
-      </div>
-
-      <div class="new-badge" id="newBadge" style="display:none;">NEW</div>
-
-      <div class="nameplate" id="nameplate">
-        <div class="stars-row" id="starsRow"></div>
+      <img class="reveal-bg" id="revealBK" src="BK.jpg" alt="BK">
+      <img class="reveal-main" id="revealMain" alt="card">
+      <img class="reveal-zoom" id="revealZoom" alt="zoom">
+      <div class="reveal-whiteflash" id="whiteFlash"></div>
+      <div class="reveal-quote" id="revealQuote"><div class="quote-box"><div class="quote-line" id="quoteLine"></div></div></div>
+      <div class="reveal-ui">
+        <div class="new-tag" id="newTag">NEW</div>
+        <div class="star-row" id="starRow"></div>
         <div class="card-name" id="cardName"></div>
       </div>
-
-      <div class="tap-tip" id="tapTip" style="display:none;">點一下繼續</div>
+      <div class="tap-tip">點一下繼續</div>
     </div>
   </div>
 
-  <script>
-    const ALL_CARDS = [
-      { id:'01-3-a', characterId:'01', character:'金卮', rarity:3, title:'歸筆',  file:'01-3-金卮-歸筆.jpg' },
-      { id:'01-3-b', characterId:'01', character:'金卮', rarity:3, title:'藏鋒',  file:'01-3-金卮-藏鋒.jpg' },
-      { id:'01-4',   characterId:'01', character:'金卮', rarity:4, title:'山河入卷',file:'01-4-金卮-山河入卷.jpg' },
-      { id:'01-5',   characterId:'01', character:'金卮', rarity:5, title:'落筆成約',file:'01-5-金卮-落筆成約.jpg', quote:'「既然回來了，這幅畫，自然要由你來落最後一筆。」' },
+  <div class="dialog-overlay" id="dialogOverlay">
+    <div class="dialog-box">
+      <div class="dialog-title" id="dialogTitle">提示</div>
+      <div class="dialog-text" id="dialogText"></div>
+      <button class="dialog-btn" id="dialogConfirm">確定</button>
+    </div>
+  </div>
+</div>
 
-      { id:'02-3-a', characterId:'02', character:'玉衡', rarity:3, title:'留春',  file:'02-3-玉衡-留春.jpg' },
-      { id:'02-3-b', characterId:'02', character:'玉衡', rarity:3, title:'醉影',  file:'02-3-玉衡-醉影.jpg' },
-      { id:'02-4',   characterId:'02', character:'玉衡', rarity:4, title:'花下聽雨',file:'02-4-玉衡-花下聽雨.jpg' },
-      { id:'02-5',   characterId:'02', character:'玉衡', rarity:5, title:'一夕春深',file:'02-5-玉衡-一夕春深.jpg', quote:'「未曾想，有一日能與你如此相依相惜。」' },
+<script>
+const COST_SINGLE = 350;
+const COST_TEN = 3500;
+const PROB_R = 0.90;
+const PROB_SR = 0.09;
+const PROB_SSR = 0.01;
 
-      { id:'03-3-a', characterId:'03', character:'墨凉', rarity:3, title:'寄情',  file:'03-3-墨凉-寄情.jpg' },
-      { id:'03-3-b', characterId:'03', character:'墨凉', rarity:3, title:'傲雪',  file:'03-3-墨凉-傲雪.jpg' },
-      { id:'03-4',   characterId:'03', character:'墨凉', rarity:4, title:'寒枝同賞',file:'03-4-墨凉-寒枝同賞.jpg' },
-      { id:'03-5',   characterId:'03', character:'墨凉', rarity:5, title:'雪後聞心',file:'03-5-墨凉-雪後聞心.jpg', quote:'「這山水風光，花君可願與我共賞？」' },
+const CARD_QUOTES = {
+  '01-5-金卮-落筆成約.jpg':'「既然回來了，這幅畫，自然要由你來落最後一筆。」',
+  '02-5-玉衡-一夕春深.jpg':'「未曾想，有一日能與你如此相依相惜。」',
+  '03-5-墨凉-雪後聞心.jpg':'「這山水風光，花君可願與我共賞？」',
+  '04-5-雲初-藥香入夢.jpg':'「若你需要……我會一直在這裡。」',
+  '05-5-殷桑-不許離春.jpg':'「你若靠太近，我可不保證自己能控制得住。」',
+  '06-5-夙華-一瓣成癮.jpg':'「這香氣來源何處……不如花君親自來尋，可好？」',
+  '07-5-微月-月色為你.jpg':'「世人於我皆過客，唯獨你，不同。」',
+  '08-5-影淵-霜下藏心.jpg':'「我本無意涉世，卻還是因你動了心。」',
+  '09-5-澄心-蓮燈照歸.jpg':'「你終於回來了……花君。」',
+  '10-5-洛丞-醉擁人間.jpg':'「良辰美景，花君可願與我對飲一杯？」',
+  '11-5-沈韶-荼靡未盡.jpg':'「姐姐……這次可不能再丟下我了唷。」',
+  '12-5-白宸-入骨生蘭.jpg':'「別擔心，我會一直陪在你身邊。」',
+  '13-5-疏影-劍心向你.jpg':'「只要我在這裡，你就無須擔心其他。」',
+  '14-5-解憂-與你忘憂.jpg':'「有我在，什麼煩憂事都拋開，走！帶你逛逛！」',
+  '15-5-葉揚-此身朝你.jpg':'「放心！我會第一個衝在你前面！」'
+};
 
-      { id:'04-3-a', characterId:'04', character:'雲初', rarity:3, title:'微暖',  file:'04-3-雲初-微暖.jpg' },
-      { id:'04-3-b', characterId:'04', character:'雲初', rarity:3, title:'聽脈',  file:'04-3-雲初-聽脈.jpg' },
-      { id:'04-4',   characterId:'04', character:'雲初', rarity:4, title:'杏雨微晴',file:'04-4-雲初-杏雨微晴.jpg' },
-      { id:'04-5',   characterId:'04', character:'雲初', rarity:5, title:'藥香入夢',file:'04-5-雲初-藥香入夢.jpg', quote:'「若你需要……我會一直在這裡。」' },
+const rawCards = [
+['01-3-金卮-歸筆.jpg'],['01-3-金卮-藏鋒.jpg'],['01-4-金卮-山河入卷.jpg'],['01-5-金卮-落筆成約.jpg'],
+['02-3-玉衡-留春.jpg'],['02-3-玉衡-醉影.jpg'],['02-4-玉衡-花下聽雨.jpg'],['02-5-玉衡-一夕春深.jpg'],
+['03-3-墨凉-寄情.jpg'],['03-3-墨凉-傲雪.jpg'],['03-4-墨凉-寒枝同賞.jpg'],['03-5-墨凉-雪後聞心.jpg'],
+['04-3-雲初-微暖.jpg'],['04-3-雲初-聽脈.jpg'],['04-4-雲初-杏雨微晴.jpg'],['04-5-雲初-藥香入夢.jpg'],
+['05-3-殷桑-試探.jpg'],['05-3-殷桑-縱寵.jpg'],['05-4-殷桑-春色獨占.jpg'],['05-5-殷桑-不許離春.jpg'],
+['06-3-夙華-迷香.jpg'],['06-3-夙華-藏笑.jpg'],['06-4-夙華-香間設局.jpg'],['06-5-夙華-一瓣成癮.jpg'],
+['07-3-微月-破例.jpg'],['07-3-微月-清絕.jpg'],['07-4-微月-照水無塵.jpg'],['07-5-微月-月色為你.jpg'],
+['08-3-影淵-孤山.jpg'],['08-3-影淵-晚霜.jpg'],['08-4-影淵-東籬舊夢.jpg'],['08-5-影淵-霜下藏心.jpg'],
+['09-3-澄心-無塵.jpg'],['09-3-澄心-歸夜.jpg'],['09-4-澄心-月下參禪.jpg'],['09-5-澄心-蓮燈照歸.jpg'],
+['10-3-洛丞-對酌.jpg'],['10-3-洛丞-醉臥.jpg'],['10-4-洛丞-花前盛宴.jpg'],['10-5-洛丞-醉擁人間.jpg'],
+['11-3-沈韶-低喚.jpg'],['11-3-沈韶-晚開.jpg'],['11-4-沈韶-花謝餘聲.jpg'],['11-5-沈韶-荼靡未盡.jpg'],
+['12-3-白宸-近身.jpg'],['12-3-白宸-幽香.jpg'],['12-4-白宸-空谷迴音.jpg'],['12-5-白宸-入骨生蘭.jpg'],
+['13-3-疏影-凌雪.jpg'],['13-3-疏影-試劍.jpg'],['13-4-疏影-寒枝照刃.jpg'],['13-5-疏影-劍心向你.jpg'],
+['14-3-解憂-同行.jpg'],['14-3-解憂-逐風.jpg'],['14-4-解憂-晴野無憂.jpg'],['14-5-解憂-與你忘憂.jpg'],
+['15-3-葉揚-先鋒.jpg'],['15-3-葉揚-向陽.jpg'],['15-4-葉揚-烈日同行.jpg'],['15-5-葉揚-此身朝你.jpg']
+];
 
-      { id:'05-3-a', characterId:'05', character:'殷桑', rarity:3, title:'試探',  file:'05-3-殷桑-試探.jpg' },
-      { id:'05-3-b', characterId:'05', character:'殷桑', rarity:3, title:'縱寵',  file:'05-3-殷桑-縱寵.jpg' },
-      { id:'05-4',   characterId:'05', character:'殷桑', rarity:4, title:'春色獨占',file:'05-4-殷桑-春色獨占.jpg' },
-      { id:'05-5',   characterId:'05', character:'殷桑', rarity:5, title:'不許離春',file:'05-5-殷桑-不許離春.jpg', quote:'「你若靠太近，我可不保證自己能控制得住。」' },
+const cards = rawCards.map(([file])=>{
+  const [id, rarity, charName, cardTitleExt] = file.replace('.jpg','').split('-');
+  const title = cardTitleExt;
+  return {
+    id:file,
+    file,
+    no:id,
+    rarity:Number(rarity),
+    charName,
+    title,
+    display:`${charName}．${title}`,
+    quote:CARD_QUOTES[file] || ''
+  };
+});
 
-      { id:'06-3-a', characterId:'06', character:'夙華', rarity:3, title:'迷香',  file:'06-3-夙華-迷香.jpg' },
-      { id:'06-3-b', characterId:'06', character:'夙華', rarity:3, title:'藏笑',  file:'06-3-夙華-藏笑.jpg' },
-      { id:'06-4',   characterId:'06', character:'夙華', rarity:4, title:'香間設局',file:'06-4-夙華-香間設局.jpg' },
-      { id:'06-5',   characterId:'06', character:'夙華', rarity:5, title:'一瓣成癮',file:'06-5-夙華-一瓣成癮.jpg', quote:'「這香氣來源何處……不如花君親自來尋，可好？」' },
+const pools = [
+  {
+    key:'flower-painting',
+    name:'花影入畫',
+    members:['金卮','玉衡','墨凉'],
+    desc:'金卮、玉衡、墨凉限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
+  },
+  {
+    key:'fragrant-shadow',
+    name:'香影浮動',
+    members:['雲初','殷桑','夙華'],
+    desc:'雲初、殷桑、夙華限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
+  },
+  {
+    key:'tea-fragrance',
+    name:'茶香裊裊',
+    members:['微月','影淵','澄心'],
+    desc:'微月、影淵、澄心限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
+  },
+  {
+    key:'flowers-fall',
+    name:'花影錯落',
+    members:['洛丞','沈韶','白宸'],
+    desc:'洛丞、沈韶、白宸限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
+  },
+  {
+    key:'sword-flower',
+    name:'劍影如花',
+    members:['疏影','解憂','葉揚'],
+    desc:'疏影、解憂、葉揚限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
+  }
+].map(pool=>({
+  ...pool,
+  ssr: cards.filter(c=>c.rarity===5 && pool.members.includes(c.charName)),
+  sr: cards.filter(c=>c.rarity===4),
+  r: cards.filter(c=>c.rarity===3)
+}));
 
-      { id:'07-3-a', characterId:'07', character:'微月', rarity:3, title:'破例',  file:'07-3-微月-破例.jpg' },
-      { id:'07-3-b', characterId:'07', character:'微月', rarity:3, title:'清絕',  file:'07-3-微月-清絕.jpg' },
-      { id:'07-4',   characterId:'07', character:'微月', rarity:4, title:'照水無塵',file:'07-4-微月-照水無塵.jpg' },
-      { id:'07-5',   characterId:'07', character:'微月', rarity:5, title:'月色為你',file:'07-5-微月-月色為你.jpg', quote:'「世人於我皆過客，唯獨你，不同。」' },
+const state = {
+  currentPool:1,
+  gold:'159萬',
+  diamonds:587890,
+  records:[],
+  owned:new Set(),
+  pending:[],
+  revealIndex:0,
+  awaitingTap:false,
+  videoSkipClicks:0,
+  heroTimer:null,
+  heroIndex:0,
+  isDrawing:false
+};
 
-      { id:'08-3-a', characterId:'08', character:'影淵', rarity:3, title:'孤山',  file:'08-3-影淵-孤山.jpg' },
-      { id:'08-3-b', characterId:'08', character:'影淵', rarity:3, title:'晚霜',  file:'08-3-影淵-晚霜.jpg' },
-      { id:'08-4',   characterId:'08', character:'影淵', rarity:4, title:'東籬舊夢',file:'08-4-影淵-東籬舊夢.jpg' },
-      { id:'08-5',   characterId:'08', character:'影淵', rarity:5, title:'霜下藏心',file:'08-5-影淵-霜下藏心.jpg', quote:'「我本無意涉世，卻還是因你動了心。」' },
+const poolNav = document.getElementById('poolNav');
+const heroMedia = document.getElementById('heroMedia');
+const poolTitle = document.getElementById('poolTitle');
+const poolDesc = document.getElementById('poolDesc');
+const poolTip = document.getElementById('poolTip');
+const goldValue = document.getElementById('goldValue');
+const diamondValue = document.getElementById('diamondValue');
+const recordBtn = document.getElementById('recordBtn');
+const catalogBtn = document.getElementById('catalogBtn');
+const recordPanel = document.getElementById('recordPanel');
+const recordList = document.getElementById('recordList');
+const recordClose = document.getElementById('recordClose');
+const catalogOverlay = document.getElementById('catalogOverlay');
+const catalogBody = document.getElementById('catalogBody');
+const catalogClose = document.getElementById('catalogClose');
+const videoOverlay = document.getElementById('videoOverlay');
+const gachaVideo = document.getElementById('gachaVideo');
+const revealOverlay = document.getElementById('revealOverlay');
+const revealBK = document.getElementById('revealBK');
+const revealMain = document.getElementById('revealMain');
+const revealZoom = document.getElementById('revealZoom');
+const whiteFlash = document.getElementById('whiteFlash');
+const revealQuote = document.getElementById('revealQuote');
+const quoteLine = document.getElementById('quoteLine');
+const newTag = document.getElementById('newTag');
+const starRow = document.getElementById('starRow');
+const cardName = document.getElementById('cardName');
+const dialogOverlay = document.getElementById('dialogOverlay');
+const dialogTitle = document.getElementById('dialogTitle');
+const dialogText = document.getElementById('dialogText');
+const dialogConfirm = document.getElementById('dialogConfirm');
 
-      { id:'09-3-a', characterId:'09', character:'澄心', rarity:3, title:'無塵',  file:'09-3-澄心-無塵.jpg' },
-      { id:'09-3-b', characterId:'09', character:'澄心', rarity:3, title:'歸夜',  file:'09-3-澄心-歸夜.jpg' },
-      { id:'09-4',   characterId:'09', character:'澄心', rarity:4, title:'月下參禪',file:'09-4-澄心-月下參禪.jpg' },
-      { id:'09-5',   characterId:'09', character:'澄心', rarity:5, title:'蓮燈照歸',file:'09-5-澄心-蓮燈照歸.jpg', quote:'「你終於回來了……花君。」' },
+function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function nowString(){ const d = new Date(); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`; }
+function updateCurrency(){ goldValue.textContent = state.gold; diamondValue.textContent = String(state.diamonds); }
+function showDialog(title,text){ dialogTitle.textContent = title; dialogText.textContent = text; dialogOverlay.classList.add('show'); }
+function hideDialog(){ dialogOverlay.classList.remove('show'); }
+dialogConfirm.addEventListener('click', hideDialog);
 
-      { id:'10-3-a', characterId:'10', character:'洛丞', rarity:3, title:'對酌',  file:'10-3-洛丞-對酌.jpg' },
-      { id:'10-3-b', characterId:'10', character:'洛丞', rarity:3, title:'醉臥',  file:'10-3-洛丞-醉臥.jpg' },
-      { id:'10-4',   characterId:'10', character:'洛丞', rarity:4, title:'花前盛宴',file:'10-4-洛丞-花前盛宴.jpg' },
-      { id:'10-5',   characterId:'10', character:'洛丞', rarity:5, title:'醉擁人間',file:'10-5-洛丞-醉擁人間.jpg', quote:'「良辰美景，花君可願與我對飲一杯？」' },
+document.querySelectorAll('.summon-btn').forEach(btn=>btn.addEventListener('click', ()=>startDraw(Number(btn.dataset.draw))));
+recordBtn.addEventListener('click', ()=>recordPanel.classList.add('open'));
+recordClose.addEventListener('click', ()=>recordPanel.classList.remove('open'));
+catalogBtn.addEventListener('click', ()=>catalogOverlay.classList.add('open'));
+catalogClose.addEventListener('click', ()=>catalogOverlay.classList.remove('open'));
 
-      { id:'11-3-a', characterId:'11', character:'沈韶', rarity:3, title:'低喚',  file:'11-3-沈韶-低喚.jpg' },
-      { id:'11-3-b', characterId:'11', character:'沈韶', rarity:3, title:'晚開',  file:'11-3-沈韶-晚開.jpg' },
-      { id:'11-4',   characterId:'11', character:'沈韶', rarity:4, title:'花謝餘聲',file:'11-4-沈韶-花謝餘聲.jpg' },
-      { id:'11-5',   characterId:'11', character:'沈韶', rarity:5, title:'荼靡未盡',file:'11-5-沈韶-荼靡未盡.jpg', quote:'「姐姐……這次可不能再丟下我了唷。」' },
+function renderNav(){
+  poolNav.innerHTML='';
+  pools.forEach((pool,idx)=>{
+    const btn = document.createElement('button');
+    btn.className = 'pool-btn' + (idx===state.currentPool ? ' active' : '');
+    btn.innerHTML = `<div class="shape"></div><div class="label">${pool.name}</div>`;
+    btn.addEventListener('click', ()=>{ state.currentPool = idx; renderPool(); });
+    poolNav.appendChild(btn);
+  });
+}
 
-      { id:'12-3-a', characterId:'12', character:'白宸', rarity:3, title:'近身',  file:'12-3-白宸-近身.jpg' },
-      { id:'12-3-b', characterId:'12', character:'白宸', rarity:3, title:'幽香',  file:'12-3-白宸-幽香.jpg' },
-      { id:'12-4',   characterId:'12', character:'白宸', rarity:4, title:'空谷迴音',file:'12-4-白宸-空谷迴音.jpg' },
-      { id:'12-5',   characterId:'12', character:'白宸', rarity:5, title:'入骨生蘭',file:'12-5-白宸-入骨生蘭.jpg', quote:'「別擔心，我會一直陪在你身邊。」' },
+function renderPool(){
+  renderNav();
+  const pool = pools[state.currentPool];
+  poolTitle.textContent = pool.name;
+  poolDesc.textContent = pool.desc;
+  poolTip.textContent = `${pool.members.join('、')}限定五星機率提升。`;
+  renderHero(pool);
+}
 
-      { id:'13-3-a', characterId:'13', character:'疏影', rarity:3, title:'凌雪',  file:'13-3-疏影-凌雪.jpg' },
-      { id:'13-3-b', characterId:'13', character:'疏影', rarity:3, title:'試劍',  file:'13-3-疏影-試劍.jpg' },
-      { id:'13-4',   characterId:'13', character:'疏影', rarity:4, title:'寒枝照刃',file:'13-4-疏影-寒枝照刃.jpg' },
-      { id:'13-5',   characterId:'13', character:'疏影', rarity:5, title:'劍心向你',file:'13-5-疏影-劍心向你.jpg', quote:'「只要我在這裡，你就無須擔心其他。」' },
+function renderHero(pool){
+  clearInterval(state.heroTimer);
+  heroMedia.innerHTML='';
+  pool.ssr.forEach((card,i)=>{
+    const img = document.createElement('img');
+    img.src = card.file;
+    img.alt = card.display;
+    if(i===0) img.classList.add('active');
+    heroMedia.appendChild(img);
+  });
+  const imgs = [...heroMedia.querySelectorAll('img')];
+  state.heroIndex = 0;
+  state.heroTimer = setInterval(()=>{
+    imgs[state.heroIndex]?.classList.remove('active');
+    state.heroIndex = (state.heroIndex+1)%imgs.length;
+    imgs[state.heroIndex]?.classList.add('active');
+  }, 3200);
+}
 
-      { id:'14-3-a', characterId:'14', character:'解憂', rarity:3, title:'同行',  file:'14-3-解憂-同行.jpg' },
-      { id:'14-3-b', characterId:'14', character:'解憂', rarity:3, title:'逐風',  file:'14-3-解憂-逐風.jpg' },
-      { id:'14-4',   characterId:'14', character:'解憂', rarity:4, title:'晴野無憂',file:'14-4-解憂-晴野無憂.jpg' },
-      { id:'14-5',   characterId:'14', character:'解憂', rarity:5, title:'與你忘憂',file:'14-5-解憂-與你忘憂.jpg', quote:'「有我在，什麼煩憂事都拋開，走！帶你逛逛！」' },
+function renderRecords(){
+  if(!state.records.length){
+    recordList.innerHTML = '<div class="record-item"><div class="name">尚無抽卡紀錄</div></div>';
+    return;
+  }
+  recordList.innerHTML = state.records.slice().reverse().map(r=>`
+    <div class="record-item ${r.rarity===5?'ssr':''}">
+      <div class="rarity">${'★'.repeat(r.rarity)}</div>
+      <div>
+        <div class="name">${r.display}${r.isNew ? '　NEW' : ''}</div>
+        <div>${r.pool}</div>
+      </div>
+      <div class="time">${r.time}</div>
+    </div>
+  `).join('');
+}
 
-      { id:'15-3-a', characterId:'15', character:'葉揚', rarity:3, title:'先鋒',  file:'15-3-葉揚-先鋒.jpg' },
-      { id:'15-3-b', characterId:'15', character:'葉揚', rarity:3, title:'向陽',  file:'15-3-葉揚-向陽.jpg' },
-      { id:'15-4',   characterId:'15', character:'葉揚', rarity:4, title:'烈日同行',file:'15-4-葉揚-烈日同行.jpg' },
-      { id:'15-5',   characterId:'15', character:'葉揚', rarity:5, title:'此身朝你',file:'15-5-葉揚-此身朝你.jpg', quote:'「放心！我會第一個衝在你前面！」' }
-    ];
-
-    const POOLS = [
-      {
-        key:'香影浮動',
-        desc:'雲初、殷桑、夙華限定五星機率提升。五星僅出現本組三張，三星與四星為十五位全員常駐。',
-        featured:['04','05','06']
-      },
-      {
-        key:'花影入畫',
-        desc:'金卮、玉衡、墨凉限定五星機率提升。五星僅出現本組三張，三星與四星為十五位全員常駐。',
-        featured:['01','02','03']
-      },
-      {
-        key:'茶香裊裊',
-        desc:'微月、影淵、澄心限定五星機率提升。五星僅出現本組三張，三星與四星為十五位全員常駐。',
-        featured:['07','08','09']
-      },
-      {
-        key:'花影錯落',
-        desc:'洛丞、沈韶、白宸限定五星機率提升。五星僅出現本組三張，三星與四星為十五位全員常駐。',
-        featured:['10','11','12']
-      },
-      {
-        key:'劍影如花',
-        desc:'疏影、解憂、葉揚限定五星機率提升。五星僅出現本組三張，三星與四星為十五位全員常駐。',
-        featured:['13','14','15']
-      }
-    ];
-
-    const STAR_ASSET = { 3:'star3.png', 4:'star4.png', 5:'star5.png' };
-    const BK_ASSET = 'BK.jpg';
-
-    const poolTabs = document.getElementById('poolTabs');
-    const poolName = document.getElementById('poolName');
-    const poolDesc = document.getElementById('poolDesc');
-    const heroRotator = document.getElementById('heroRotator');
-    const drawOneBtn = document.getElementById('drawOneBtn');
-    const drawTenBtn = document.getElementById('drawTenBtn');
-    const goldText = document.getElementById('goldText');
-    const gemText = document.getElementById('gemText');
-    const recordBtn = document.getElementById('recordBtn');
-    const recordPanel = document.getElementById('recordPanel');
-    const recordClose = document.getElementById('recordClose');
-    const recordList = document.getElementById('recordList');
-    const collectionBtn = document.getElementById('collectionBtn');
-    const collectionPanel = document.getElementById('collectionPanel');
-    const collectionClose = document.getElementById('collectionClose');
-    const collectionGrid = document.getElementById('collectionGrid');
-    const collectionCount = document.getElementById('collectionCount');
-
-    const videoOverlay = document.getElementById('videoOverlay');
-    const videoWrap = document.getElementById('videoWrap');
-    const introVideo = document.getElementById('introVideo');
-
-    const revealOverlay = document.getElementById('revealOverlay');
-    const revealStage = document.getElementById('revealStage');
-    const flashLayer = document.getElementById('flashLayer');
-    const spotlight = document.getElementById('spotlight');
-    const spotlightImage = document.getElementById('spotlightImage');
-    const quoteLayer = document.getElementById('quoteLayer');
-    const bkBg = document.getElementById('bkBg');
-    const quoteText = document.getElementById('quoteText');
-    const cardHolder = document.getElementById('cardHolder');
-    const cardImage = document.getElementById('cardImage');
-    const newBadge = document.getElementById('newBadge');
-    const nameplate = document.getElementById('nameplate');
-    const starsRow = document.getElementById('starsRow');
-    const cardName = document.getElementById('cardName');
-    const tapTip = document.getElementById('tapTip');
-
-    let currentPoolIndex = 0;
-    let heroTimer = null;
-    let heroActiveIndex = 0;
-    let currentSlides = [];
-
-    let pendingCards = [];
-    let revealIndex = 0;
-    let busy = false;
-    let canAdvance = false;
-    let currentPhaseTimers = [];
-    let skipTapCount = 0;
-    let historyRecords = [];
-    let ownedCards = new Set();
-    let currentCardIsNew = false;
-    let gold = 1590000;
-    let gems = 587890;
-
-    const DRAW_COST = { 1:350, 10:3500 };
-    const RARITY_RATE = { 3:0.9, 4:0.09, 5:0.01 };
-
-    function asset(path){
-      return encodeURI(path);
-    }
-
-    function byPool(pool){
-      const poolFeatured = ALL_CARDS.filter(c => c.rarity === 5 && pool.featured.includes(c.characterId));
-      const normal = ALL_CARDS.filter(c => c.rarity === 3 || c.rarity === 4);
-      return { featured: poolFeatured, normal };
-    }
-
-    function buildTabs(){
-      poolTabs.innerHTML = '';
-      POOLS.forEach((pool, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'pool-tab' + (index === currentPoolIndex ? ' active' : '');
-        btn.textContent = pool.key;
-        btn.addEventListener('click', () => {
-          if(busy) return;
-          currentPoolIndex = index;
-          renderPool();
-        });
-        poolTabs.appendChild(btn);
-      });
-    }
-
-    function renderPool(){
-      buildTabs();
-      const pool = POOLS[currentPoolIndex];
-      poolName.textContent = pool.key;
-      poolDesc.textContent = pool.desc;
-      renderHero(pool);
-    }
-
-    function renderHero(pool){
-      clearInterval(heroTimer);
-      heroRotator.innerHTML = '';
-      currentSlides = byPool(pool).featured;
-      heroActiveIndex = 0;
-
-      currentSlides.forEach((card, i) => {
-        const slide = document.createElement('div');
-        slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-        slide.style.backgroundImage = `url("${asset(card.file)}")`;
-        heroRotator.appendChild(slide);
-      });
-
-      const slides = [...heroRotator.querySelectorAll('.hero-slide')];
-      if(slides.length <= 1) return;
-      heroTimer = setInterval(() => {
-        slides[heroActiveIndex].classList.remove('active');
-        heroActiveIndex = (heroActiveIndex + 1) % slides.length;
-        slides[heroActiveIndex].classList.add('active');
-      }, 3200);
-    }
-
-    function weightedRarity(){
-      const r = Math.random();
-      if(r < RARITY_RATE[5]) return 5;
-      if(r < RARITY_RATE[5] + RARITY_RATE[4]) return 4;
-      return 3;
-    }
-
-    function randomFrom(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
-
-    function rollCards(count){
-      const pool = POOLS[currentPoolIndex];
-      const { featured, normal } = byPool(pool);
-      const threes = normal.filter(c => c.rarity === 3);
-      const fours = normal.filter(c => c.rarity === 4);
-      const output = [];
-
-      for(let i=0;i<count;i++){
-        let rarity = weightedRarity();
-        let card;
-        if(rarity === 5) card = randomFrom(featured);
-        else if(rarity === 4) card = randomFrom(fours);
-        else card = randomFrom(threes);
-        output.push(structuredClone(card));
-      }
-
-      if(count === 10 && !output.some(card => card.rarity >= 4)){
-        const replaceIndex = Math.floor(Math.random() * output.length);
-        output[replaceIndex] = structuredClone(randomFrom(fours));
-      }
-
-      return output;
-    }
-
-    function formatGold(value){
-      if(value >= 10000){
-        const wan = Math.floor(value / 10000);
-        return `${wan}萬`;
-      }
-      return `${value}`;
-    }
-
-    function renderCurrency(){
-      goldText.textContent = `金幣　${formatGold(gold)}`;
-      gemText.textContent = `鑽石　${gems}`;
-    }
-
-    function spendGems(cost){
-      if(gems < cost) return false;
-      gems -= cost;
-      renderCurrency();
-      return true;
-    }
-
-    async function startDraw(count){
-      if(busy) return;
-      const cost = DRAW_COST[count];
-      if(!spendGems(cost)) return;
-      busy = true;
-      recordPanel.classList.remove('show');
-      collectionPanel.classList.remove('show');
-      pendingCards = rollCards(count);
-      revealIndex = 0;
-      await playDrawVideo();
-      openRevealOverlay();
-      revealCardAtIndex(revealIndex);
-    }
-
-    function wait(ms){
-      return new Promise(resolve => {
-        const t = setTimeout(resolve, ms);
-        currentPhaseTimers.push(t);
-      });
-    }
-
-    function resetRevealState(){
-      currentPhaseTimers.forEach(clearTimeout);
-      currentPhaseTimers = [];
-      canAdvance = false;
-      tapTip.style.display = 'none';
-      flashLayer.classList.remove('active');
-      spotlight.classList.remove('show');
-      quoteLayer.classList.remove('show');
-      nameplate.classList.remove('show');
-      cardHolder.className = 'card-holder';
-      cardHolder.style.opacity = '0';
-      cardHolder.style.transform = 'scale(.93)';
-      starsRow.innerHTML = '';
-      cardName.textContent = '';
-      newBadge.classList.remove('show');
-      newBadge.style.display = 'none';
-    }
-
-    function openRevealOverlay(){
-      revealOverlay.classList.add('show');
-    }
-
-    function closeRevealOverlay(){
-      revealOverlay.classList.remove('show');
-      resetRevealState();
-      busy = false;
-    }
-
-    async function playDrawVideo(){
-      return new Promise(resolve => {
-        skipTapCount = 0;
-        videoOverlay.classList.add('show');
-        introVideo.currentTime = 0;
-
-        const finish = () => {
-          cleanup();
-          videoOverlay.classList.remove('show');
-          resolve();
-        };
-
-        const onEnded = () => finish();
-        const onClick = () => {
-          skipTapCount += 1;
-          clearTimeout(clickResetTimer);
-          clickResetTimer = setTimeout(() => skipTapCount = 0, 280);
-          if(skipTapCount >= 2) finish();
-        };
-
-        let clickResetTimer = null;
-
-        const cleanup = () => {
-          introVideo.pause();
-          introVideo.removeEventListener('ended', onEnded);
-          videoWrap.removeEventListener('click', onClick);
-          clearTimeout(clickResetTimer);
-        };
-
-        introVideo.addEventListener('ended', onEnded, { once:true });
-        videoWrap.addEventListener('click', onClick);
-
-        const playPromise = introVideo.play();
-        if(playPromise && typeof playPromise.catch === 'function'){
-          playPromise.catch(() => {
-            finish();
-          });
-        }
-      });
-    }
-
-    async function revealCardAtIndex(index){
-      resetRevealState();
-      const card = pendingCards[index];
-      currentCardIsNew = !ownedCards.has(card.id);
-      pushHistory(card);
-      ownedCards.add(card.id);
-      renderCollection();
-
-      if(card.rarity < 5){
-        await revealNormalCard(card);
-      }else{
-        await revealFiveStar(card);
-      }
-
-      if(!busy) return;
-      canAdvance = true;
-      tapTip.style.display = 'block';
-    }
-
-    async function revealNormalCard(card){
-      cardImage.src = asset(card.file);
-      cardImage.alt = `${card.character} ${card.title}`;
-      cardHolder.className = 'card-holder card-normal';
-      cardHolder.classList.add('show', 'pop-in');
-      flashLayer.classList.add('active');
-      // 3-4星揭露節奏：白閃 0.72 秒，卡圖放大回復總長約 1.10 秒
-      await wait(1050);
-      cardHolder.classList.remove('pop-in');
-      showNameplate(card);
-    }
-
-    async function revealFiveStar(card){
-      bkBg.style.backgroundImage = `url("${asset(BK_ASSET)}")`;
-      quoteText.textContent = card.quote || '';
-      quoteLayer.classList.add('show');
-      await wait(1800);
-      quoteLayer.classList.remove('show');
-
-      const zooms = [
-        {x:'18%', y:'24%'},
-        {x:'52%', y:'42%'},
-        {x:'80%', y:'68%'}
-      ];
-
-      spotlightImage.src = asset(card.file);
-      spotlightImage.alt = `${card.character} ${card.title}`;
-      spotlight.classList.add('show');
-
-      const frame = spotlight.querySelector('.spotlight-frame');
-      for(let i=0;i<zooms.length;i++){
-        frame.animate([
-          { transform:'scale(1)', offset:0 },
-          { transform:'scale(1)', offset:1 }
-        ], { duration:1, fill:'forwards' });
-        spotlightImage.style.transformOrigin = `${zooms[i].x} ${zooms[i].y}`;
-        spotlightImage.animate([
-          { transform:'scale(3)', opacity:.35 },
-          { transform:'scale(3)', opacity:1 }
-        ], {
-          duration:650,
-          fill:'forwards',
-          easing:'cubic-bezier(.18,.78,.27,1)'
-        });
-        await wait(700);
-      }
-
-      spotlight.classList.remove('show');
-      cardHolder.className = 'card-holder card-five';
-      cardImage.src = asset(card.file);
-      cardHolder.classList.add('show');
-      cardHolder.animate([
-        { transform:'scale(.78)', opacity:0 },
-        { transform:'scale(1.05)', opacity:1, offset:.72 },
-        { transform:'scale(1)', opacity:1 }
-      ], { duration:800, fill:'forwards', easing:'cubic-bezier(.18,.82,.24,1)' });
-      await wait(820);
-      showNameplate(card);
-    }
-
-    function showNameplate(card){
-      cardName.textContent = `${card.character}．${card.title}`;
-      starsRow.innerHTML = '';
-      const starAsset = STAR_ASSET[card.rarity];
-      for(let i=0;i<card.rarity;i++){
-        const img = document.createElement('img');
-        img.className = 'star-item';
-        img.src = asset(starAsset);
-        img.alt = `star ${i+1}`;
-        starsRow.appendChild(img);
-      }
-      nameplate.classList.add('show');
-      if(currentCardIsNew){
-        newBadge.style.display = 'block';
-        newBadge.classList.add('show');
-      }
-      const starItems = [...starsRow.querySelectorAll('.star-item')];
-      starItems.forEach((item, idx) => {
-        const t = setTimeout(() => item.classList.add('show'), idx * 140);
-        currentPhaseTimers.push(t);
-      });
-    }
-
-    function pushHistory(card){
-      historyRecords.unshift({
-        rarity: card.rarity,
-        text: `${card.character}．${card.title}`,
-        time: new Date().toLocaleString('zh-Hant', { hour12:false })
-      });
-      if(historyRecords.length > 200) historyRecords.length = 200;
-      renderHistory();
-    }
-
-    function renderHistory(){
-      if(!historyRecords.length){
-        recordList.innerHTML = '<div class="record-item"><div class="left"><span class="record-name">尚無紀錄</span></div></div>';
-        return;
-      }
-      recordList.innerHTML = historyRecords.map(item => `
-        <div class="record-item ${item.rarity === 5 ? 'record-five' : ''}">
-          <div class="left">
-            <div class="record-rarity">${'★'.repeat(item.rarity)}</div>
-            <div class="record-name">${item.text}</div>
-          </div>
-          <div class="record-time">${item.time}</div>
+function renderCatalog(){
+  catalogBody.innerHTML = cards.map(card=>{
+    const owned = state.owned.has(card.id);
+    return `
+      <div class="catalog-card ${owned?'':'locked'}">
+        <img src="${card.file}" alt="${card.display}">
+        ${owned ? '' : '<div class="catalog-lock">未取得</div>'}
+        <div class="catalog-info">
+          <div class="catalog-name">${card.display}</div>
+          <div class="catalog-rarity">${'★'.repeat(card.rarity)}</div>
         </div>
-      `).join('');
+      </div>
+    `;
+  }).join('');
+}
+
+function rollCard(pool, forceAtLeastSR=false){
+  const r = Math.random();
+  if(!forceAtLeastSR){
+    if(r < PROB_SSR) return sample(pool.ssr);
+    if(r < PROB_SSR + PROB_SR) return sample(pool.sr);
+    return sample(pool.r);
+  }
+  if(r < (PROB_SSR / (PROB_SSR + PROB_SR))) return sample(pool.ssr);
+  return sample(pool.sr);
+}
+
+function generateDrawResults(drawCount){
+  const pool = pools[state.currentPool];
+  const results = [];
+  if(drawCount === 1){
+    results.push(rollCard(pool,false));
+    return results;
+  }
+  for(let i=0;i<9;i++) results.push(rollCard(pool,false));
+  if(results.every(c=>c.rarity===3)){
+    results.push(rollCard(pool,true));
+  }else{
+    results.push(rollCard(pool,false));
+  }
+  return results;
+}
+
+function startDraw(drawCount){
+  if(state.isDrawing) return;
+  const cost = drawCount===1 ? COST_SINGLE : COST_TEN;
+  if(state.diamonds < cost){
+    showDialog('鑽石不足', `目前鑽石不足，${drawCount===1 ? '召喚一次' : '召喚十次'}需要 ${cost} 鑽石。`);
+    return;
+  }
+  state.isDrawing = true;
+  state.diamonds -= cost;
+  updateCurrency();
+
+  const results = generateDrawResults(drawCount).map(card=>({
+    ...card,
+    isNew: !state.owned.has(card.id),
+    pool: pools[state.currentPool].name,
+    time: nowString()
+  }));
+  results.forEach(card=>{
+    state.owned.add(card.id);
+    state.records.push(card);
+  });
+  renderRecords();
+  renderCatalog();
+  state.pending = results;
+  state.revealIndex = 0;
+  playVideoThenReveal();
+}
+
+function playVideoThenReveal(){
+  state.videoSkipClicks = 0;
+  videoOverlay.classList.add('show');
+  gachaVideo.currentTime = 0;
+  const p = gachaVideo.play();
+  if(p && p.catch){ p.catch(()=>finishVideo()); }
+}
+
+function finishVideo(){
+  gachaVideo.pause();
+  videoOverlay.classList.remove('show');
+  showCurrentCard();
+}
+
+gachaVideo.addEventListener('ended', finishVideo);
+videoOverlay.addEventListener('click', ()=>{
+  state.videoSkipClicks++;
+  if(state.videoSkipClicks >= 2) finishVideo();
+  setTimeout(()=>{ state.videoSkipClicks = 0; }, 420);
+});
+
+function resetRevealUI(){
+  revealBK.style.display='none';
+  revealMain.style.display='none';
+  revealZoom.style.display='none';
+  revealQuote.style.display='none';
+  quoteLine.textContent='';
+  whiteFlash.style.animation='none';
+  whiteFlash.style.opacity='0';
+  starRow.innerHTML='';
+  cardName.textContent='';
+  newTag.style.display='none';
+  revealMain.style.animation='none';
+}
+
+function buildStars(rarity){
+  starRow.innerHTML='';
+  for(let i=0;i<rarity;i++){
+    const img = document.createElement('img');
+    img.src = rarity===3 ? 'star3.png' : rarity===4 ? 'star4.png' : 'star5.png';
+    img.alt = 'star';
+    starRow.appendChild(img);
+    setTimeout(()=>{ img.style.animation='starPop .3s ease forwards'; }, 120*i);
+  }
+}
+
+function showCurrentCard(){
+  const card = state.pending[state.revealIndex];
+  if(!card){
+    endDrawFlow();
+    return;
+  }
+  resetRevealUI();
+  revealOverlay.classList.add('show');
+  newTag.style.display = card.isNew ? 'block' : 'none';
+  cardName.textContent = card.display;
+  buildStars(card.rarity);
+  if(card.rarity === 5){
+    playSSRReveal(card);
+  }else{
+    playNormalReveal(card);
+  }
+}
+
+function playNormalReveal(card){
+  revealMain.src = card.file;
+  revealMain.style.display='block';
+  whiteFlash.style.animation='whiteFlash .72s ease';
+  revealMain.style.animation='cardSettle 1.1s ease forwards';
+  setTimeout(()=>{ state.awaitingTap = true; }, 850);
+}
+
+function playSSRReveal(card){
+  revealBK.style.display='block';
+  revealQuote.style.display='grid';
+  quoteLine.textContent = card.quote || '';
+  revealQuote.style.animation='quoteFade .35s ease';
+  setTimeout(()=>{
+    revealQuote.style.display='none';
+    startSSRZooms(card);
+  }, 1800);
+}
+
+function startSSRZooms(card){
+  const points = [
+    '28% 26%',
+    '74% 28%',
+    '50% 62%'
+  ];
+  let index = 0;
+  revealZoom.src = card.file;
+  revealZoom.style.display='block';
+  const nextZoom = ()=>{
+    if(index >= points.length){
+      revealZoom.style.display='none';
+      revealMain.src = card.file;
+      revealMain.style.display='block';
+      revealMain.style.animation='cardSettle .9s ease forwards';
+      whiteFlash.style.animation='whiteFlash .58s ease';
+      setTimeout(()=>{ state.awaitingTap = true; }, 900);
+      return;
     }
+    revealZoom.style.objectPosition = points[index];
+    revealZoom.animate([
+      { transform:'translate(-50%,-50%) scale(3.15)', opacity:0 },
+      { transform:'translate(-50%,-50%) scale(3)', opacity:1 },
+      { transform:'translate(-50%,-50%) scale(2.65)', opacity:1 }
+    ], { duration:700, easing:'ease-out', fill:'forwards' });
+    index++;
+    setTimeout(nextZoom, 700);
+  };
+  nextZoom();
+}
 
-    function renderCollection(){
-      collectionCount.textContent = `（${ownedCards.size}/${ALL_CARDS.length}）`;
-      collectionGrid.innerHTML = ALL_CARDS.map(card => {
-        const owned = ownedCards.has(card.id);
-        const stars = Array.from({ length: card.rarity }, () => `<img src="${asset(STAR_ASSET[card.rarity])}" alt="star">`).join('');
-        return `
-          <div class="collection-card ${owned ? '' : 'locked'}">
-            <span class="collection-owned-tag">${owned ? '已取得' : '未取得'}</span>
-            <img src="${asset(card.file)}" alt="${card.character} ${card.title}">
-            ${owned ? '' : '<div class="locked-mark">LOCK</div>'}
-            <div class="collection-meta">
-              <div class="collection-stars">${stars}</div>
-              <div class="collection-title">${card.character}．${card.title}</div>
-              <div class="collection-file">${card.file}</div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+revealOverlay.addEventListener('click', ()=>{
+  if(!state.awaitingTap) return;
+  state.awaitingTap = false;
+  state.revealIndex++;
+  if(state.revealIndex >= state.pending.length){
+    endDrawFlow();
+  }else{
+    showCurrentCard();
+  }
+});
 
-    function advanceReveal(){
-      if(!busy || !canAdvance) return;
-      canAdvance = false;
-      tapTip.style.display = 'none';
-      revealIndex += 1;
-      if(revealIndex >= pendingCards.length){
-        closeRevealOverlay();
-        return;
-      }
-      revealCardAtIndex(revealIndex);
-    }
+function endDrawFlow(){
+  revealOverlay.classList.remove('show');
+  state.pending = [];
+  state.revealIndex = 0;
+  state.awaitingTap = false;
+  state.isDrawing = false;
+}
 
-    drawOneBtn.addEventListener('click', () => startDraw(1));
-    drawTenBtn.addEventListener('click', () => startDraw(10));
-    revealStage.addEventListener('click', advanceReveal);
-
-    recordBtn.addEventListener('click', () => {
-      collectionPanel.classList.remove('show');
-      recordPanel.classList.toggle('show');
-    });
-    recordClose.addEventListener('click', () => recordPanel.classList.remove('show'));
-    collectionBtn.addEventListener('click', () => {
-      recordPanel.classList.remove('show');
-      collectionPanel.classList.toggle('show');
-    });
-    collectionClose.addEventListener('click', () => collectionPanel.classList.remove('show'));
-
-    renderCurrency();
-    renderHistory();
-    renderCollection();
-    renderPool();
-
-    window.addEventListener('beforeunload', () => clearInterval(heroTimer));
-  </script>
+updateCurrency();
+renderPool();
+renderRecords();
+renderCatalog();
+</script>
 </body>
 </html>
