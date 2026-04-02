@@ -36,7 +36,7 @@
     background:
       radial-gradient(circle at 18% 20%, rgba(255,255,255,.65), transparent 22%),
       radial-gradient(circle at 70% 80%, rgba(255,255,255,.28), transparent 28%),
-      linear-gradient(180deg,#f7e6eb 0%, #eed5dc 100%);
+      linear-gradient(180deg,#ffffff 0%, #f7e6eb 7%, #eed5dc 100%);
     color:#fff;
   }
 
@@ -51,14 +51,15 @@
   .bg-ornament::before{left:18vw;top:-8vh;width:18vw;height:18vw;background:rgba(255,255,255,.18)}
   .bg-ornament::after{right:-68vw;top:-24vh;width:42vw;height:42vw;background:rgba(255,255,255,.22)}
 
-  .hud-top{position:absolute;top:max(10px, env(safe-area-inset-top));right:max(14px, env(safe-area-inset-right));display:flex;gap:14px;z-index:20}
+  .hud-top{position:absolute;top:max(10px, env(safe-area-inset-top));right:clamp(86px,8vw,180px);display:flex;gap:18px;z-index:30}
+  /* 頂部資源條 */
   .currency-box{
-    min-width:170px;height:54px;padding:0 18px 0 12px;border-radius:12px;
-    background:linear-gradient(180deg,#6770a8,#4e527d);box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.22);
+    min-width:200px;height:54px;padding:0 24px 0 14px;border-radius:14px;
+    background:linear-gradient(180deg,#6f74ab,#545987);box-shadow:0 10px 24px rgba(89,77,121,.18), inset 0 0 0 2px rgba(255,255,255,.28);
     display:flex;align-items:center;gap:12px;position:relative;
   }
-  .currency-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:#f4d25f;color:#8a6820;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
-  .currency-icon.diamond{background:linear-gradient(180deg,#8ff2ff,#3cb7e1);color:#ffffff;font-size:15px}
+  .currency-icon{width:26px;height:26px;display:block;object-fit:contain;flex:0 0 26px}
+  .currency-icon.diamond{background:none}
   .currency-value{font-size:clamp(18px,2vw,28px);font-weight:800;letter-spacing:.02em;text-shadow:0 2px 4px rgba(0,0,0,.22)}
   .currency-plus{
     position:absolute;right:-12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;
@@ -66,45 +67,46 @@
     box-shadow:0 10px 24px rgba(94,58,83,.24), inset 0 0 0 2px rgba(201,91,110,.18);
   }
 
-  .pool-nav{position:absolute;left:max(18px, env(safe-area-inset-left));top:max(92px, calc(env(safe-area-inset-top) + 84px));width:min(26vw, 430px);display:flex;flex-direction:column;gap:18px;z-index:12}
+  .pool-nav{position:absolute;left:-34px;top:max(84px, calc(env(safe-area-inset-top) + 74px));width:min(28vw, 470px);display:flex;flex-direction:column;gap:14px;z-index:18}
   .pool-btn{
     position:relative;height:min(11vh,122px);border:0;background:none;padding:0;cursor:pointer;filter:drop-shadow(0 10px 20px rgba(122,69,99,.16));
     transform-origin:left center;transition:transform .18s ease, filter .18s ease;
   }
   .pool-btn:hover{transform:translateX(2px)}
   .pool-btn:active{transform:translateX(6px) scale(.98)}
+  /* 目錄形狀 */
   .pool-btn .shape{
-    position:absolute;inset:0;background:linear-gradient(180deg,#f7d0d5,#efb7c2);clip-path:polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
+    position:absolute;inset:0;background:linear-gradient(180deg,#f7d7de,#efc2cc);
+    clip-path:polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
     box-shadow:inset 0 0 0 3px rgba(255,255,255,.55);
   }
   .pool-btn .shape::after{
-    content:"";position:absolute;inset:8px 24px 8px 14px;clip-path:polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
-    background:linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.15));
+    content:"";position:absolute;inset:7px 18px 7px 30px;
+    clip-path:polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+    background:linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.08));
   }
-  .pool-btn.active .shape{background:linear-gradient(180deg,#f6dfe4,#f3bdc8)}
-  .pool-btn.active{transform:translateX(14px)}
+  .pool-btn.active .shape{background:linear-gradient(180deg,#f7cfd9,#ebb5c2)}
+  .pool-btn.active{transform:translateX(10px)}
   .pool-btn.active .shape::before{
-    content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,255,255,.46), transparent 42%);
-    clip-path:polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%, 8% 50%);
+    content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,255,255,.28), transparent 38%);
+    clip-path:polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
   }
   .pool-btn .label{
-    position:absolute;inset:0;display:flex;align-items:center;padding-left:28px;padding-right:58px;
-    font-size:clamp(24px,2.6vw,66px);font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:var(--stroke);white-space:nowrap;
+    position:absolute;inset:0;display:flex;align-items:center;padding-left:62px;padding-right:54px;
+    font-size:clamp(22px,2.2vw,58px);font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:var(--stroke);white-space:nowrap;
   }
 
-  .main-stage{position:absolute;inset:0;padding:18px 18px 18px min(24vw, 360px);z-index:2}
-  .stage-card{
-    position:relative;width:100%;height:100%;border-radius:0;overflow:hidden;background:transparent;box-shadow:none;
-  }
-  .hero-wrap{position:absolute;inset:66px 14px 12px 10px;overflow:hidden;border-radius:0}
+  .main-stage{position:absolute;inset:0;padding:0;z-index:2}
+  .stage-card{position:relative;width:100%;height:100%;border-radius:0;overflow:hidden;background:transparent;box-shadow:none;}
+  .hero-wrap{position:absolute;left:clamp(318px,22vw,430px);right:22px;top:74px;bottom:0;overflow:hidden;border-radius:0}
   .hero-media{position:absolute;inset:0;background:#f3e7eb}
   .hero-media img{
     position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:100%;height:auto;min-height:100%;object-fit:cover;object-position:center center;
+    width:auto;height:106%;min-width:100%;object-fit:cover;object-position:center center;
     opacity:0;transition:opacity .65s ease, transform 6s ease;
     filter:none;
   }
-  .hero-media img.active{opacity:1;transform:translate(-50%,-50%) scale(1.02)}
+  .hero-media img.active{opacity:1;transform:translate(-50%,-50%) scale(1.045)}
   .hero-soft-left,
   .hero-soft-right,
   .hero-soft-top,
@@ -112,45 +114,57 @@
   .hero-soft-left{left:0;top:0;bottom:0;width:14%;background:linear-gradient(90deg, rgba(255,255,255,.34), rgba(255,255,255,.12), transparent 80%)}
   .hero-soft-right{right:0;top:0;bottom:0;width:10%;background:linear-gradient(270deg, rgba(255,255,255,.22), transparent 74%)}
   .hero-soft-top{inset:0;background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 18%, transparent 86%, rgba(0,0,0,.02))}
-  .hero-pink-flare{left:33%;top:3%;width:14%;height:26%;background:radial-gradient(circle, rgba(255,172,190,.52), rgba(255,172,190,.12) 42%, transparent 72%)}
+  .hero-pink-flare{left:33%;top:3%;width:14%;height:26%;background:radial-gradient(circle, rgba(255,172,190,.46), rgba(255,172,190,.10) 42%, transparent 72%)}
+  .left-bk2{position:absolute;left:0;top:0;bottom:0;width:25%;background:url("BK2.PNG") no-repeat left center/cover;opacity:.72;pointer-events:none;z-index:3}
+  /* 右側漸變 */
+  .right-deep-gradient{position:absolute;right:0;top:0;bottom:0;width:18%;background:linear-gradient(270deg, rgba(130,42,93,.30), rgba(130,42,93,.12), rgba(130,42,93,0));pointer-events:none;z-index:3}
 
-  .headline{position:absolute;left:7.5%;top:17%;z-index:4;max-width:26%}
-  .headline .title{font-size:clamp(34px,3.3vw,62px);font-weight:900;letter-spacing:.06em;text-shadow:0 3px 12px rgba(255,255,255,.35), -1px -1px 0 rgba(198,120,149,.75), 1px -1px 0 rgba(198,120,149,.75), -1px 1px 0 rgba(198,120,149,.75), 1px 1px 0 rgba(198,120,149,.75);color:#fff;white-space:nowrap}
-  .headline .desc{margin-top:18px;font-size:clamp(13px,1.05vw,20px);line-height:1.8;color:rgba(255,255,255,.92);text-shadow:0 2px 8px rgba(113,47,73,.25);max-width:22ch}
-  .hero-tip{position:absolute;left:31%;top:5%;right:15%;z-index:4;text-align:center;font-size:clamp(16px,1.4vw,28px);font-weight:800;letter-spacing:.03em;color:#fff;text-shadow:0 2px 10px rgba(255,255,255,.42), -1px -1px 0 rgba(198,120,149,.72), 1px -1px 0 rgba(198,120,149,.72), -1px 1px 0 rgba(198,120,149,.72), 1px 1px 0 rgba(198,120,149,.72)}
+    .headline{position:absolute;left:5.5%;top:6.2%;z-index:5;max-width:34%}
+  /* 標題與副標題色彩 */
+  .headline .title{font-size:clamp(34px,3vw,60px);font-weight:900;letter-spacing:.06em;color:#fff;white-space:nowrap;
+    text-shadow:0 0 14px rgba(255,255,255,.95), 0 0 26px rgba(255,255,255,.72), -1px -1px 0 rgba(198,120,149,.75), 1px -1px 0 rgba(198,120,149,.75), -1px 1px 0 rgba(198,120,149,.75), 1px 1px 0 rgba(198,120,149,.75)}
+  .headline .desc{display:none}
+  .hero-tip{position:absolute;left:5.7%;top:14.6%;z-index:5;text-align:left;font-size:clamp(15px,1.22vw,24px);font-weight:800;letter-spacing:.03em;color:#fff;
+    text-shadow:0 0 12px rgba(255,255,255,.92), 0 0 22px rgba(255,255,255,.68), -1px -1px 0 rgba(198,120,149,.72), 1px -1px 0 rgba(198,120,149,.72), -1px 1px 0 rgba(198,120,149,.72), 1px 1px 0 rgba(198,120,149,.72)}
 
-  .side-actions{position:absolute;right:2.8%;top:18%;display:flex;flex-direction:column;gap:18px;z-index:5}
+    .side-actions{position:absolute;right:2.2%;top:11.2%;display:flex;flex-direction:column;gap:18px;z-index:6}
+  /* 抽卡紀錄按鈕 */
   .side-btn{
-    min-width:min(15vw, 220px);height:min(11vh,112px);padding:0 28px;border:0;border-radius:28px;cursor:pointer;
-    background:linear-gradient(180deg,#7774b0,#64609a);box-shadow:0 12px 26px rgba(107,81,110,.18), inset 0 0 0 3px rgba(207,207,255,.24);
-    color:#fff;font-size:clamp(22px,2vw,46px);font-weight:900;letter-spacing:.06em;text-shadow:0 3px 8px rgba(0,0,0,.22);transition:transform .18s ease, filter .18s ease;
+    min-width:min(10vw, 156px);height:min(7.5vh,76px);padding:0 18px;border:0;border-radius:22px;cursor:pointer;
+    background:linear-gradient(180deg,#847ec0,#6b68a6);box-shadow:0 10px 20px rgba(107,81,110,.18), inset 0 0 0 2px rgba(230,225,255,.24);
+    color:#fff;font-size:clamp(16px,1.38vw,30px);font-weight:900;letter-spacing:.03em;text-shadow:0 3px 8px rgba(0,0,0,.18);transition:transform .18s ease, filter .18s ease;
   }
   .side-btn:active{transform:scale(.98)}
 
-  .summon-actions{position:absolute;left:50%;bottom:6%;transform:translateX(-7%);display:flex;gap:min(3vw,36px);z-index:5}
+    .summon-actions{position:absolute;left:58%;bottom:9.2%;transform:translateX(-50%);display:flex;gap:min(2.4vw,30px);z-index:6}
   .summon-btn{
-    width:min(18vw, 300px);height:min(14vh,150px);padding-top:8px;border-radius:28px;border:4px solid rgba(226,110,129,.85);cursor:pointer;
-    background:linear-gradient(180deg,#f8edef,#f4ccd2);box-shadow:0 12px 26px rgba(123,77,94,.14), inset 0 0 0 4px rgba(255,255,255,.6);
+    width:min(16vw, 272px);height:min(12.2vh,124px);padding-top:6px;border-radius:24px;border:4px solid rgba(226,110,129,.85);cursor:pointer;
+    background:linear-gradient(180deg,#f8edef,#f4ccd2);box-shadow:0 10px 22px rgba(123,77,94,.12), inset 0 0 0 4px rgba(255,255,255,.62);
     color:#e16a73;text-shadow:0 2px 0 rgba(255,255,255,.8), 0 3px 10px rgba(255,255,255,.7);transition:transform .18s ease, filter .18s ease;
   }
   .summon-btn:hover{transform:translateY(-2px)}
   .summon-btn:active{transform:translateY(1px) scale(.98)}
-  .summon-main{font-size:clamp(30px,3vw,64px);font-weight:900;letter-spacing:.05em;line-height:1.05}
-  .summon-sub{margin-top:8px;font-size:clamp(16px,1.2vw,24px);font-weight:900}
+  .summon-main{font-size:clamp(28px,2.8vw,58px);font-weight:900;letter-spacing:.05em;line-height:1.05}
+  .summon-sub{margin-top:8px;font-size:clamp(14px,1.05vw,22px);font-weight:900}
 
   .record-panel{
-    position:absolute;right:18px;top:18px;z-index:40;width:min(40vw, 460px);max-height:min(72vh, 820px);display:none;flex-direction:column;
+    position:absolute;right:18px;top:18px;z-index:40;width:min(36vw, 440px);max-height:min(72vh, 780px);display:none;flex-direction:column;
     background:rgba(255,248,251,.96);border-radius:24px;box-shadow:0 24px 60px rgba(95,61,85,.28);overflow:hidden;color:#70495e;
   }
   .record-panel.open{display:flex}
+  .record-meta{font-size:13px;opacity:.78}
+  .record-footer{padding:10px 14px 14px;display:flex;justify-content:center;gap:10px;background:rgba(255,248,251,.96)}
+  .record-page-btn{border:0;border-radius:12px;padding:8px 14px;background:#eec2ce;color:#7a4563;font-weight:900;cursor:pointer}
+  .record-page-btn:disabled{opacity:.35;cursor:default}
+  .record-page-indicator{display:flex;align-items:center;font-weight:900;color:#8d6378}
   .record-head{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#f7d1d9,#efbdc9);color:#fff;text-shadow:var(--stroke);font-size:clamp(20px,1.4vw,30px);font-weight:900}
   .record-close{border:0;background:#fff;color:#c56b89;width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer}
-  .record-list{padding:12px 16px 18px;overflow:auto;display:flex;flex-direction:column;gap:10px}
-  .record-item{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:#fff;box-shadow:0 8px 20px rgba(104,72,93,.08)}
-  .record-item .rarity{min-width:52px;font-weight:900;color:#a06a82}
+  .record-list{padding:10px 12px 10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+  .record-item{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:14px;background:#fff;box-shadow:0 8px 20px rgba(104,72,93,.08);min-height:54px}
+  .record-item .rarity{min-width:48px;font-weight:900;color:#a06a82;font-size:14px}
   .record-item.ssr .rarity,.record-item.ssr .name{color:#d49c00}
-  .record-item .name{font-weight:800}
-  .record-item .time{margin-left:auto;font-size:12px;opacity:.55;white-space:nowrap}
+  .record-item .name{font-weight:800;font-size:14px}
+  .record-item .time{margin-left:auto;font-size:11px;opacity:.48;white-space:nowrap}
 
   .overlay{position:absolute;inset:0;display:none;z-index:90}
   .overlay.show{display:block}
@@ -212,17 +226,29 @@
     .pool-btn .label{padding-left:16px;padding-right:28px;font-size:clamp(16px,4vw,28px)}
     .main-stage{padding:8px 8px 8px 33vw}
     .hero-wrap{inset:56px 4px 6px 2px}
-    .headline{left:7%;top:16%;max-width:34%}
-    .headline .title{font-size:clamp(22px,6vw,36px)}
-    .headline .desc{margin-top:10px;font-size:clamp(9px,2.2vw,12px);line-height:1.55}
-    .hero-tip{left:20%;right:10%;top:4.5%;font-size:clamp(10px,2.4vw,14px)}
+      .headline{position:absolute;left:5.5%;top:6.2%;z-index:5;max-width:34%}
+  /* 標題與副標題色彩 */
+  .headline .title{font-size:clamp(34px,3vw,60px);font-weight:900;letter-spacing:.06em;color:#fff;white-space:nowrap;
+    text-shadow:0 0 14px rgba(255,255,255,.95), 0 0 26px rgba(255,255,255,.72), -1px -1px 0 rgba(198,120,149,.75), 1px -1px 0 rgba(198,120,149,.75), -1px 1px 0 rgba(198,120,149,.75), 1px 1px 0 rgba(198,120,149,.75)}
+  .headline .desc{display:none}
+  .hero-tip{position:absolute;left:5.7%;top:14.6%;z-index:5;text-align:left;font-size:clamp(15px,1.22vw,24px);font-weight:800;letter-spacing:.03em;color:#fff;
+    text-shadow:0 0 12px rgba(255,255,255,.92), 0 0 22px rgba(255,255,255,.68), -1px -1px 0 rgba(198,120,149,.72), 1px -1px 0 rgba(198,120,149,.72), -1px 1px 0 rgba(198,120,149,.72), 1px 1px 0 rgba(198,120,149,.72)}
+
+  .side-actions{left:20%;right:10%;top:4.5%;font-size:clamp(10px,2.4vw,14px)}
     .side-actions{right:2%;top:12%;gap:10px}
     .side-btn{min-width:22vw;height:7vh;padding:0 12px;border-radius:16px;font-size:clamp(13px,3.8vw,20px)}
-    .summon-actions{left:50%;bottom:7%;transform:translateX(-3%);gap:10px}
-    .summon-btn{width:min(33vw, 220px);height:10.5vh;border-radius:18px;border-width:3px}
-    .summon-main{font-size:clamp(18px,6vw,30px)}
-    .summon-sub{font-size:clamp(10px,2.8vw,13px)}
-    .record-panel{right:8px;top:8px;width:min(86vw, 360px);max-height:76vh}
+      .summon-actions{position:absolute;left:58%;bottom:9.2%;transform:translateX(-50%);display:flex;gap:min(2.4vw,30px);z-index:6}
+  .summon-btn{
+    width:min(16vw, 272px);height:min(12.2vh,124px);padding-top:6px;border-radius:24px;border:4px solid rgba(226,110,129,.85);cursor:pointer;
+    background:linear-gradient(180deg,#f8edef,#f4ccd2);box-shadow:0 10px 22px rgba(123,77,94,.12), inset 0 0 0 4px rgba(255,255,255,.62);
+    color:#e16a73;text-shadow:0 2px 0 rgba(255,255,255,.8), 0 3px 10px rgba(255,255,255,.7);transition:transform .18s ease, filter .18s ease;
+  }
+  .summon-btn:hover{transform:translateY(-2px)}
+  .summon-btn:active{transform:translateY(1px) scale(.98)}
+  .summon-main{font-size:clamp(28px,2.8vw,58px);font-weight:900;letter-spacing:.05em;line-height:1.05}
+  .summon-sub{margin-top:8px;font-size:clamp(14px,1.05vw,22px);font-weight:900}
+
+  .record-panel{right:8px;top:8px;width:min(86vw, 360px);max-height:76vh}
     .quote-line{font-size:clamp(20px,5vw,32px)}
     .card-name{font-size:clamp(22px,6vw,34px)}
   }
@@ -234,12 +260,12 @@
 
   <div class="hud-top">
     <div class="currency-box">
-      <div class="currency-icon">●</div>
+      <img class="currency-icon" src="gold.png" alt="gold">
       <div class="currency-value" id="goldValue">159萬</div>
       <div class="currency-plus">+</div>
     </div>
     <div class="currency-box">
-      <div class="currency-icon diamond">💎</div>
+      <img class="currency-icon diamond" src="diamond.png" alt="diamond">
       <div class="currency-value" id="diamondValue">587890</div>
       <div class="currency-plus">+</div>
     </div>
@@ -251,6 +277,8 @@
     <section class="stage-card">
       <div class="hero-wrap">
         <div class="hero-media" id="heroMedia"></div>
+        <div class="left-bk2"></div>
+        <div class="right-deep-gradient"></div>
         <div class="hero-soft-left"></div>
         <div class="hero-soft-right"></div>
         <div class="hero-soft-top"></div>
@@ -284,6 +312,7 @@
   <aside class="record-panel" id="recordPanel">
     <div class="record-head">抽卡紀錄 <button class="record-close" id="recordClose">×</button></div>
     <div class="record-list" id="recordList"></div>
+    <div class="record-footer"><button class="record-page-btn" id="recordPrev">上一頁</button><div class="record-page-indicator" id="recordPageIndicator">1 / 1</div><button class="record-page-btn" id="recordNext">下一頁</button></div>
   </aside>
 
   <div class="catalog-overlay" id="catalogOverlay">
@@ -429,7 +458,8 @@ const state = {
   videoSkipClicks:0,
   heroTimer:null,
   heroIndex:0,
-  isDrawing:false
+  isDrawing:false,
+  recordPage:0
 };
 
 const poolNav = document.getElementById('poolNav');
@@ -444,6 +474,9 @@ const catalogBtn = document.getElementById('catalogBtn');
 const recordPanel = document.getElementById('recordPanel');
 const recordList = document.getElementById('recordList');
 const recordClose = document.getElementById('recordClose');
+const recordPrev = document.getElementById('recordPrev');
+const recordNext = document.getElementById('recordNext');
+const recordPageIndicator = document.getElementById('recordPageIndicator');
 const catalogOverlay = document.getElementById('catalogOverlay');
 const catalogBody = document.getElementById('catalogBody');
 const catalogClose = document.getElementById('catalogClose');
@@ -474,6 +507,8 @@ dialogConfirm.addEventListener('click', hideDialog);
 document.querySelectorAll('.summon-btn').forEach(btn=>btn.addEventListener('click', ()=>startDraw(Number(btn.dataset.draw))));
 recordBtn.addEventListener('click', ()=>recordPanel.classList.add('open'));
 recordClose.addEventListener('click', ()=>recordPanel.classList.remove('open'));
+recordPrev.addEventListener('click', ()=>{ state.recordPage = Math.max(0, state.recordPage - 1); renderRecords(); });
+recordNext.addEventListener('click', ()=>{ const maxPage = Math.max(0, Math.ceil(state.records.length / 10) - 1); state.recordPage = Math.min(maxPage, state.recordPage + 1); renderRecords(); });
 if(catalogBtn) catalogBtn.addEventListener('click', ()=>catalogOverlay.classList.add('open'));
 if(catalogClose) catalogClose.addEventListener('click', ()=>catalogOverlay.classList.remove('open'));
 
@@ -492,7 +527,7 @@ function renderPool(){
   renderNav();
   const pool = pools[state.currentPool];
   poolTitle.textContent = pool.name;
-  poolDesc.textContent = '五星僅出現本組三張，三星與四星為全員常駐。';
+  poolDesc.textContent = '';
   poolTip.textContent = `${pool.members.join('、')}限定五星機率提升。`;
   renderHero(pool);
 }
@@ -519,18 +554,29 @@ function renderHero(pool){
 function renderRecords(){
   if(!state.records.length){
     recordList.innerHTML = '<div class="record-item"><div class="name">尚無抽卡紀錄</div></div>';
+    recordPageIndicator.textContent = '1 / 1';
+    recordPrev.disabled = true;
+    recordNext.disabled = true;
     return;
   }
-  recordList.innerHTML = state.records.slice().reverse().map(r=>`
+  const pages = [];
+  const reversed = state.records.slice().reverse();
+  for(let i=0;i<reversed.length;i+=10) pages.push(reversed.slice(i, i+10));
+  const maxPage = Math.max(0, pages.length - 1);
+  if(state.recordPage > maxPage) state.recordPage = maxPage;
+  const page = pages[state.recordPage] || [];
+  recordList.innerHTML = page.map(r=>`
     <div class="record-item ${r.rarity===5?'ssr':''}">
       <div class="rarity">${'★'.repeat(r.rarity)}</div>
       <div>
-        <div class="name">${r.display}${r.isNew ? '　NEW' : ''}</div>
-        <div>${r.pool}</div>
+        <div class="name">${r.pool}｜${r.display}${r.isNew ? '　NEW' : ''}</div>
       </div>
       <div class="time">${r.time}</div>
     </div>
   `).join('');
+  recordPageIndicator.textContent = `${state.recordPage + 1} / ${pages.length}`;
+  recordPrev.disabled = state.recordPage === 0;
+  recordNext.disabled = state.recordPage === maxPage;
 }
 
 function renderCatalog(){
@@ -597,6 +643,7 @@ function startDraw(drawCount){
     state.owned.add(card.id);
     state.records.push(card);
   });
+  state.recordPage = 0;
   renderRecords();
   renderCatalog();
   state.pending = results;
@@ -658,13 +705,17 @@ function showCurrentCard(){
   }
   resetRevealUI();
   revealOverlay.classList.add('show');
-  newTag.style.display = card.isNew ? 'block' : 'none';
   cardName.textContent = card.display;
-  buildStars(card.rarity);
-  if(card.rarity === 5){
-    playSSRReveal(card);
+  if(card.isNew){
+    newTag.style.display = 'block';
+    buildStars(card.rarity);
+    if(card.rarity === 5){
+      playSSRReveal(card);
+    }else{
+      playNormalReveal(card);
+    }
   }else{
-    playNormalReveal(card);
+    playKnownReveal(card);
   }
 }
 
@@ -674,6 +725,14 @@ function playNormalReveal(card){
   whiteFlash.style.animation='whiteFlash .72s ease';
   revealMain.style.animation='cardSettle 1.1s ease forwards';
   setTimeout(()=>{ state.awaitingTap = true; }, 850);
+}
+
+function playKnownReveal(card){
+  revealMain.src = card.file;
+  revealMain.style.display='block';
+  revealMain.style.animation='none';
+  starRow.innerHTML='';
+  setTimeout(()=>{ state.awaitingTap = true; }, 80);
 }
 
 function playSSRReveal(card){
