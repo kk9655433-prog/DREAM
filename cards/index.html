@@ -92,14 +92,15 @@
     font-size:clamp(24px,2.6vw,66px);font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:var(--stroke);white-space:nowrap;
   }
 
-  .main-stage{position:absolute;inset:0;padding:22px 22px 22px min(28vw, 450px);z-index:2}
+  .main-stage{position:absolute;inset:0;padding:18px 18px 18px min(24vw, 360px);z-index:2}
   .stage-card{
     position:relative;width:100%;height:100%;border-radius:0;overflow:hidden;background:transparent;box-shadow:none;
   }
-  .hero-wrap{position:absolute;inset:72px 26px 18px 18px;overflow:hidden;border-radius:0}
-  .hero-media{position:absolute;inset:0;background:#edd7dd}
+  .hero-wrap{position:absolute;inset:66px 14px 12px 10px;overflow:hidden;border-radius:0}
+  .hero-media{position:absolute;inset:0;background:#f3e7eb}
   .hero-media img{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;width:auto;min-width:100%;object-fit:cover;object-position:center center;
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;height:auto;min-height:100%;object-fit:cover;object-position:center center;
     opacity:0;transition:opacity .65s ease, transform 6s ease;
     filter:none;
   }
@@ -108,34 +109,34 @@
   .hero-soft-right,
   .hero-soft-top,
   .hero-pink-flare{position:absolute;pointer-events:none;z-index:2}
-  .hero-soft-left{left:0;top:0;bottom:0;width:26%;background:linear-gradient(90deg, rgba(255,255,255,.88), rgba(255,255,255,.56), transparent 88%)}
-  .hero-soft-right{right:0;top:0;bottom:0;width:18%;background:linear-gradient(270deg, rgba(255,255,255,.56), transparent 74%)}
-  .hero-soft-top{inset:0;background:linear-gradient(180deg, rgba(255,255,255,.1), transparent 25%, transparent 74%, rgba(0,0,0,.04))}
+  .hero-soft-left{left:0;top:0;bottom:0;width:14%;background:linear-gradient(90deg, rgba(255,255,255,.34), rgba(255,255,255,.12), transparent 80%)}
+  .hero-soft-right{right:0;top:0;bottom:0;width:10%;background:linear-gradient(270deg, rgba(255,255,255,.22), transparent 74%)}
+  .hero-soft-top{inset:0;background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 18%, transparent 86%, rgba(0,0,0,.02))}
   .hero-pink-flare{left:33%;top:3%;width:14%;height:26%;background:radial-gradient(circle, rgba(255,172,190,.52), rgba(255,172,190,.12) 42%, transparent 72%)}
 
-  .headline{position:absolute;left:7%;top:12%;z-index:4;max-width:32%}
-  .headline .title{font-size:clamp(42px,4.5vw,90px);font-weight:900;letter-spacing:.08em;text-shadow:var(--text-shadow), var(--stroke);color:#fff;white-space:nowrap}
-  .headline .desc{margin-top:14px;font-size:clamp(16px,1.5vw,28px);line-height:1.8;color:#fff;text-shadow:0 2px 6px rgba(255,255,255,.85), 0 0 2px rgba(196,96,129,.62)}
-  .hero-tip{position:absolute;left:29%;top:8%;right:18%;z-index:4;text-align:center;font-size:clamp(22px,2.1vw,48px);font-weight:900;letter-spacing:.04em;color:#fff;text-shadow:var(--text-shadow), var(--stroke)}
+  .headline{position:absolute;left:7.5%;top:17%;z-index:4;max-width:26%}
+  .headline .title{font-size:clamp(34px,3.3vw,62px);font-weight:900;letter-spacing:.06em;text-shadow:0 3px 12px rgba(255,255,255,.35), -1px -1px 0 rgba(198,120,149,.75), 1px -1px 0 rgba(198,120,149,.75), -1px 1px 0 rgba(198,120,149,.75), 1px 1px 0 rgba(198,120,149,.75);color:#fff;white-space:nowrap}
+  .headline .desc{margin-top:18px;font-size:clamp(13px,1.05vw,20px);line-height:1.8;color:rgba(255,255,255,.92);text-shadow:0 2px 8px rgba(113,47,73,.25);max-width:22ch}
+  .hero-tip{position:absolute;left:31%;top:5%;right:15%;z-index:4;text-align:center;font-size:clamp(16px,1.4vw,28px);font-weight:800;letter-spacing:.03em;color:#fff;text-shadow:0 2px 10px rgba(255,255,255,.42), -1px -1px 0 rgba(198,120,149,.72), 1px -1px 0 rgba(198,120,149,.72), -1px 1px 0 rgba(198,120,149,.72), 1px 1px 0 rgba(198,120,149,.72)}
 
-  .side-actions{position:absolute;right:2.6%;top:16%;display:flex;flex-direction:column;gap:18px;z-index:5}
+  .side-actions{position:absolute;right:2.8%;top:18%;display:flex;flex-direction:column;gap:18px;z-index:5}
   .side-btn{
-    min-width:min(16vw, 250px);height:min(12vh,130px);padding:0 28px;border:0;border-radius:28px;cursor:pointer;
-    background:linear-gradient(180deg,#726fa5,#5f5e8f);box-shadow:0 12px 26px rgba(107,81,110,.22), inset 0 0 0 3px rgba(207,207,255,.26);
-    color:#fff;font-size:clamp(24px,2.2vw,58px);font-weight:900;letter-spacing:.08em;text-shadow:0 3px 8px rgba(0,0,0,.22);transition:transform .18s ease, filter .18s ease;
+    min-width:min(15vw, 220px);height:min(11vh,112px);padding:0 28px;border:0;border-radius:28px;cursor:pointer;
+    background:linear-gradient(180deg,#7774b0,#64609a);box-shadow:0 12px 26px rgba(107,81,110,.18), inset 0 0 0 3px rgba(207,207,255,.24);
+    color:#fff;font-size:clamp(22px,2vw,46px);font-weight:900;letter-spacing:.06em;text-shadow:0 3px 8px rgba(0,0,0,.22);transition:transform .18s ease, filter .18s ease;
   }
   .side-btn:active{transform:scale(.98)}
 
-  .summon-actions{position:absolute;right:8%;bottom:6%;display:flex;gap:min(4vw,54px);z-index:5}
+  .summon-actions{position:absolute;left:50%;bottom:6%;transform:translateX(-7%);display:flex;gap:min(3vw,36px);z-index:5}
   .summon-btn{
-    width:min(20vw, 360px);height:min(17vh,200px);padding-top:8px;border-radius:32px;border:4px solid rgba(226,110,129,.85);cursor:pointer;
-    background:linear-gradient(180deg,#f8e7ea,#f4c3cb);box-shadow:0 14px 30px rgba(123,77,94,.18), inset 0 0 0 4px rgba(255,255,255,.55);
+    width:min(18vw, 300px);height:min(14vh,150px);padding-top:8px;border-radius:28px;border:4px solid rgba(226,110,129,.85);cursor:pointer;
+    background:linear-gradient(180deg,#f8edef,#f4ccd2);box-shadow:0 12px 26px rgba(123,77,94,.14), inset 0 0 0 4px rgba(255,255,255,.6);
     color:#e16a73;text-shadow:0 2px 0 rgba(255,255,255,.8), 0 3px 10px rgba(255,255,255,.7);transition:transform .18s ease, filter .18s ease;
   }
   .summon-btn:hover{transform:translateY(-2px)}
   .summon-btn:active{transform:translateY(1px) scale(.98)}
-  .summon-main{font-size:clamp(34px,3.6vw,84px);font-weight:900;letter-spacing:.06em;line-height:1.05}
-  .summon-sub{margin-top:8px;font-size:clamp(18px,1.5vw,30px);font-weight:900}
+  .summon-main{font-size:clamp(30px,3vw,64px);font-weight:900;letter-spacing:.05em;line-height:1.05}
+  .summon-sub{margin-top:8px;font-size:clamp(16px,1.2vw,24px);font-weight:900}
 
   .record-panel{
     position:absolute;right:18px;top:18px;z-index:40;width:min(40vw, 460px);max-height:min(72vh, 820px);display:none;flex-direction:column;
@@ -206,21 +207,21 @@
     .currency-icon{width:22px;height:22px;font-size:13px}
     .currency-value{font-size:20px}
     .currency-plus{width:28px;height:28px;font-size:22px;right:-9px}
-    .pool-nav{top:max(60px, calc(env(safe-area-inset-top) + 56px));left:10px;width:34vw;gap:10px}
+    .pool-nav{top:max(60px, calc(env(safe-area-inset-top) + 56px));left:10px;width:33vw;gap:10px}
     .pool-btn{height:9.2vh}
     .pool-btn .label{padding-left:16px;padding-right:28px;font-size:clamp(16px,4vw,28px)}
-    .main-stage{padding:8px 8px 8px 34vw}
-    .hero-wrap{inset:52px 8px 8px 6px}
-    .headline{left:8%;top:13%;max-width:46%}
-    .headline .title{font-size:clamp(24px,7vw,42px)}
-    .headline .desc{font-size:clamp(10px,2.5vw,14px);line-height:1.55}
-    .hero-tip{left:24%;right:12%;top:6%;font-size:clamp(11px,2.6vw,16px)}
-    .side-actions{right:4%;top:10%;gap:10px}
-    .side-btn{min-width:24vw;height:7.8vh;padding:0 14px;border-radius:16px;font-size:clamp(14px,4vw,22px)}
-    .summon-actions{right:5%;left:auto;bottom:7%;gap:10px;flex-direction:column}
-    .summon-btn{width:min(40vw, 220px);height:11.5vh;border-radius:18px;border-width:3px}
-    .summon-main{font-size:clamp(20px,7vw,34px)}
-    .summon-sub{font-size:clamp(11px,3vw,14px)}
+    .main-stage{padding:8px 8px 8px 33vw}
+    .hero-wrap{inset:56px 4px 6px 2px}
+    .headline{left:7%;top:16%;max-width:34%}
+    .headline .title{font-size:clamp(22px,6vw,36px)}
+    .headline .desc{margin-top:10px;font-size:clamp(9px,2.2vw,12px);line-height:1.55}
+    .hero-tip{left:20%;right:10%;top:4.5%;font-size:clamp(10px,2.4vw,14px)}
+    .side-actions{right:2%;top:12%;gap:10px}
+    .side-btn{min-width:22vw;height:7vh;padding:0 12px;border-radius:16px;font-size:clamp(13px,3.8vw,20px)}
+    .summon-actions{left:50%;bottom:7%;transform:translateX(-3%);gap:10px}
+    .summon-btn{width:min(33vw, 220px);height:10.5vh;border-radius:18px;border-width:3px}
+    .summon-main{font-size:clamp(18px,6vw,30px)}
+    .summon-sub{font-size:clamp(10px,2.8vw,13px)}
     .record-panel{right:8px;top:8px;width:min(86vw, 360px);max-height:76vh}
     .quote-line{font-size:clamp(20px,5vw,32px)}
     .card-name{font-size:clamp(22px,6vw,34px)}
@@ -264,7 +265,6 @@
 
         <div class="side-actions">
           <button class="side-btn" id="recordBtn">抽卡紀錄</button>
-          <button class="side-btn" id="catalogBtn">卡片圖鑑</button>
         </div>
 
         <div class="summon-actions">
@@ -384,31 +384,31 @@ const pools = [
     key:'flower-painting',
     name:'花影入畫',
     members:['金卮','玉衡','墨凉'],
-    desc:'金卮、玉衡、墨凉限定五星機率提升。'
+    desc:'金卮、玉衡、墨凉限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
   },
   {
     key:'fragrant-shadow',
     name:'香影浮動',
     members:['雲初','殷桑','夙華'],
-    desc:'雲初、殷桑、夙華限定五星機率提升。'
+    desc:'雲初、殷桑、夙華限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
   },
   {
     key:'tea-fragrance',
     name:'茶香裊裊',
     members:['微月','影淵','澄心'],
-    desc:'微月、影淵、澄心限定五星機率提升。'
+    desc:'微月、影淵、澄心限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
   },
   {
     key:'flowers-fall',
     name:'花影錯落',
     members:['洛丞','沈韶','白宸'],
-    desc:'洛丞、沈韶、白宸限定五星機率提升。'
+    desc:'洛丞、沈韶、白宸限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
   },
   {
     key:'sword-flower',
     name:'劍影如花',
     members:['疏影','解憂','葉揚'],
-    desc:'疏影、解憂、葉揚限定五星機率提升。'
+    desc:'疏影、解憂、葉揚限定五星機率提升。\n五星僅出現本組三張，三星與四星為十五位全員常駐。'
   }
 ].map(pool=>({
   ...pool,
@@ -474,8 +474,8 @@ dialogConfirm.addEventListener('click', hideDialog);
 document.querySelectorAll('.summon-btn').forEach(btn=>btn.addEventListener('click', ()=>startDraw(Number(btn.dataset.draw))));
 recordBtn.addEventListener('click', ()=>recordPanel.classList.add('open'));
 recordClose.addEventListener('click', ()=>recordPanel.classList.remove('open'));
-catalogBtn.addEventListener('click', ()=>catalogOverlay.classList.add('open'));
-catalogClose.addEventListener('click', ()=>catalogOverlay.classList.remove('open'));
+if(catalogBtn) catalogBtn.addEventListener('click', ()=>catalogOverlay.classList.add('open'));
+if(catalogClose) catalogClose.addEventListener('click', ()=>catalogOverlay.classList.remove('open'));
 
 function renderNav(){
   poolNav.innerHTML='';
@@ -492,7 +492,7 @@ function renderPool(){
   renderNav();
   const pool = pools[state.currentPool];
   poolTitle.textContent = pool.name;
-  poolDesc.textContent = pool.desc;
+  poolDesc.textContent = '五星僅出現本組三張，三星與四星為全員常駐。';
   poolTip.textContent = `${pool.members.join('、')}限定五星機率提升。`;
   renderHero(pool);
 }
