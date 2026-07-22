@@ -21,13 +21,13 @@ body{
 
     display:flex;
     justify-content:center;
-    align-items:center;
+    align-items:flex-start;
 }
 
 .container{
     width:min(1000px,95%);
     text-align:center;
-    padding:20px;
+    padding:30px 20px 60px;
 }
 
 .title{
@@ -42,7 +42,9 @@ body{
 
     cursor:pointer;
     user-select:none;
+
     transition:.2s;
+    word-break:break-all;
 }
 
 .total:hover{
@@ -123,6 +125,46 @@ button:hover{
     font-size:1rem;
 }
 
+.history-section{
+
+    margin-top:40px;
+
+    width:100%;
+    max-width:500px;
+
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.history-title{
+
+    font-size:1.2rem;
+    font-weight:bold;
+
+    margin-bottom:15px;
+}
+
+#historyList{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.history-item{
+
+    background:#111;
+    border:1px solid #333;
+    border-radius:8px;
+
+    padding:12px;
+
+    font-size:1.1rem;
+
+    word-break:break-all;
+}
+
 .toast{
     position:fixed;
 
@@ -153,7 +195,7 @@ button:hover{
     .counters{
         grid-template-columns:repeat(2,1fr);
 
-        row-gap:60px;   /* 拉大上下兩排距離 */
+        row-gap:70px;
         column-gap:20px;
     }
 
@@ -226,15 +268,17 @@ button:hover{
         onclick="resetAll()">
         一鍵歸零
     </button>
-       <div class="history-section">
 
-       <div class="history-title">
-        歷史紀錄
-       </div>
-   
-       <div id="historyList"></div>
+    <div class="history-section">
+
+        <div class="history-title">
+            歷史紀錄
+        </div>
+
+        <div id="historyList"></div>
 
     </div>
+
 </div>
 
 <div class="toast" id="toast">
@@ -242,6 +286,8 @@ button:hover{
 </div>
 
 <script>
+
+let historyRecords = [];
 
 function getValues(){
 
@@ -296,12 +342,39 @@ function resetAll(){
     update();
 }
 
+function addHistory(value){
+
+    historyRecords.unshift(value);
+
+    historyRecords = historyRecords.slice(0,50);
+
+    const historyList =
+        document.getElementById("historyList");
+
+    historyList.innerHTML = "";
+
+    historyRecords.forEach(item=>{
+
+        historyList.innerHTML += `
+            <div class="history-item">
+                ${item}
+            </div>
+        `;
+    });
+}
+
 async function copyTotal(){
 
     const text =
         document.getElementById("total").textContent;
 
-    await navigator.clipboard.writeText(text);
+    try{
+        await navigator.clipboard.writeText(text);
+    }catch(e){
+        console.error(e);
+    }
+
+    addHistory(text);
 
     const toast =
         document.getElementById("toast");
@@ -314,49 +387,7 @@ async function copyTotal(){
 }
 
 update();
-.history-section{
 
-    margin-top:40px;
-
-    width:100%;
-    max-width:500px;
-
-    margin-left:auto;
-    margin-right:auto;
-
-    text-align:center;
-}
-
-.history-title{
-
-    font-size:1.2rem;
-    font-weight:bold;
-
-    margin-bottom:15px;
-}
-
-#historyList{
-
-    display:flex;
-    flex-direction:column;
-
-    gap:8px;
-}
-
-.history-item{
-
-    background:#111;
-
-    border:1px solid #333;
-
-    border-radius:8px;
-
-    padding:10px;
-
-    font-size:1.1rem;
-
-    word-break:break-all;
-}
 </script>
 
 </body>
