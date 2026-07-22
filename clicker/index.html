@@ -226,7 +226,15 @@ button:hover{
         onclick="resetAll()">
         一鍵歸零
     </button>
+       <div class="history-section">
 
+       <div class="history-title">
+        歷史紀錄
+       </div>
+   
+       <div id="historyList"></div>
+
+    </div>
 </div>
 
 <div class="toast" id="toast">
@@ -306,7 +314,49 @@ async function copyTotal(){
 }
 
 update();
+.history-section{
 
+    margin-top:40px;
+
+    width:100%;
+    max-width:500px;
+
+    margin-left:auto;
+    margin-right:auto;
+
+    text-align:center;
+}
+
+.history-title{
+
+    font-size:1.2rem;
+    font-weight:bold;
+
+    margin-bottom:15px;
+}
+
+#historyList{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.history-item{
+
+    background:#111;
+
+    border:1px solid #333;
+
+    border-radius:8px;
+
+    padding:10px;
+
+    font-size:1.1rem;
+
+    word-break:break-all;
+}
 </script>
 
 </body>
