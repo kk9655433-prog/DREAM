@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>우주 쇼핑몰</title>
+  <style>
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      background:#000;
+    }
+    body{
+     background-image: url('background.gif');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      font-family: "MingLiU", "PMingLiU", "新細明體", serif;
+    }
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+      padding:4vh 4vw;
+      box-sizing:border-box;
+    }
+    .title-svg{
+      width:min(92vw,2200px);
+      height: clamp(120px, 30vh, 580px);
+      margin-bottom: -90px; /* 調小間距 */
+    }
+    .subtext{
+      color:#FFD93B;
+      font-size:clamp(18px, 3.2vh, 28px);
+      letter-spacing:1px;
+      text-shadow:0 2px 8px rgba(0,0,0,0.9);
+      font-family: "MingLiU", "PMingLiU", "新細明體", serif;
+      margin-top: 4px; /* 調小與標題距離 */
+    }
+    a.shop-link{
+      display:inline-block;
+      margin-top:6px;
+      text-decoration:none;
+      font-weight:1000;
+      padding:10px 22px;
+      border-radius:10px;
+      background:linear-gradient(90deg, #ff9a3b, #ffd93b, #3bff7a, #3bb8ff, #b33bff);
+      color:#000; /* 黑字 */
+      box-shadow:0 6px 20px rgba(0,0,0,0.6);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    a.shop-link:hover{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.5);} 
+
+    @keyframes rainbowShift {
+      0% { stop-color:#ff3b3b; }
+      20% { stop-color:#ff9a3b; }
+      40% { stop-color:#ffd93b; }
+      60% { stop-color:#3bff7a; }
+      80% { stop-color:#3bb8ff; }
+      100% { stop-color:#b33bff; }
+    }
+
+    /* 小圖片的樣式範例 */
+    .floating-img{
+      position:absolute;
+      height:auto;
+    }
+    .img1{ width:400px; top:40%; right:10%; }
+    .img2{ width:480px; top:-50px; right:38%; }
+    .img3{ width:540px; top:60%; left:5%; transform:translateY(-50%); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <svg class="title-svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ff3b3b">
+            <animate attributeName="stop-color" values="#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff;#b33bff;#ff3b3b" dur="6s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="50%" stop-color="#3bb8ff">
+            <animate attributeName="stop-color" values="#3bb8ff;#b33bff;#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff" dur="6s" repeatCount="indefinite" />
+          </stop>
+          <stop offset="100%" stop-color="#b33bff">
+            <animate attributeName="stop-color" values="#b33bff;#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff;#b33bff" dur="6s" repeatCount="indefinite" />
+          </stop>
+        </linearGradient>
+        <path id="arcPath" d="M60,190 C300,60 900,60 1140,190" fill="none"/>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <text font-family="MingLiU, PMingLiU, 新細明體, serif" font-size="120" font-weight="700" text-anchor="middle" filter="url(#glow)" fill="url(#rainbow)">
+        <textPath href="#arcPath" startOffset="50%" dominant-baseline="middle" letter-spacing="2">
+          우주 쇼핑몰
+        </textPath>
+      </text>
+    </svg>
+    <div class="subtext">
+      <div><u>※외계에서 온 멋진 물건 ※ ~!!</u></div>
+      <div style="margin-top:46px;">
+        <a class="shop-link" href="Shopping.html">＞＞나는 <i>물건</i>을 본다</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 小圖片範例放置 -->
+  <img src="alien.png" alt="外星人" class="floating-img img1">
+  <img src="ufo.png" alt="UFO" class="floating-img img2">
+  <img src="planet.png" alt="行星" class="floating-img img3">
+</body>
+</html>
