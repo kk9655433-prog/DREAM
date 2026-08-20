@@ -192,14 +192,23 @@
       document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-    // 顯示購物車
-    function showCart(){
-      document.getElementById('modal-text').innerText = '這不是真正的宇宙購物中心，你不可能在這裡看到任何商品';
-      document.getElementById('modal-buttons').innerHTML = `
-        <button class="btn-no" onclick="closeModal()">Close</button>
-      `;
-      document.getElementById('modal-overlay').style.display = 'flex';
-    }
+// 顯示購物車
+function showCart(){
+  document.getElementById('modal-text').innerHTML = `
+    這不是真正的宇宙購物中心，<br>
+    你不可能在這裡看到任何商品<br>
+    如果你想認識一下本網站製作者：
+    <a href="https://www.facebook.com/XROBIST357"
+       target="_blank"
+       rel="noopener noreferrer">點我前往FB</a>
+  `;
+
+  document.getElementById('modal-buttons').innerHTML = `
+    <button class="btn-no" onclick="closeModal()">Close</button>
+  `;
+
+  document.getElementById('modal-overlay').style.display = 'flex';
+}
 
     // 確認加入購物車
     function confirmAdd(){
