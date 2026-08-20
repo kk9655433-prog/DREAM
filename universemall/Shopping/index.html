@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>우주 쇼핑몰</title>
+
   <style>
     html,body{
       height:100%;
@@ -13,12 +14,14 @@
       font-family: "MingLiU", "PMingLiU", "新細明體", serif;
       color:#FFD93B;
     }
+
     body{
       background-image: url('../PT/background.gif');
       background-repeat: no-repeat;
       background-position: center center;
       background-size: cover;
     }
+
     .wrap{
       width:100%;
       text-align:center;
@@ -28,11 +31,13 @@
       flex-direction:column;
       align-items:center;
     }
+
     .title-svg{
       width:min(92vw,2200px);
-      height: clamp(120px, 30vh, 580px);
-      margin-bottom: 20px;
+      height:clamp(120px, 30vh, 580px);
+      margin-bottom:20px;
     }
+
     .products{
       font-size:clamp(18px, 2.6vh, 28px);
       line-height:1.6;
@@ -40,18 +45,24 @@
       text-align:left;
       max-width:600px;
     }
+
     .products .centered{
       text-align:center;
       margin-bottom:20px;
-      font-size:clamp(28px, 4vh, 40px); /* 몰건更大 */
+      font-size:clamp(28px, 4vh, 40px);
     }
-    .special{ color:#FF4444; }
+
+    .special{
+      color:#FF4444;
+    }
+
     .old-price{
       text-decoration:line-through;
       color:#bbb;
       display:block;
     }
-    .cart {
+
+    .cart{
       position:fixed;
       top:10px;
       right:10px;
@@ -65,27 +76,49 @@
       display:flex;
       align-items:center;
       gap:8px;
+      z-index:100;
     }
-    .cart img{ width:24px; height:24px; }
+
+    .cart img{
+      width:24px;
+      height:24px;
+    }
 
     .floating-img{
       position:absolute;
       height:auto;
+      max-width:40vw;
     }
-    .img1{ width:400px; top:40%; right:10%; }
-    .img3{ width:540px; top:60%; left:5%; transform:translateY(-50%); }
+
+    .img1{
+      width:20vw;
+      top:40%;
+      right:10%;
+    }
+
+    .img3{
+      width:28vw;
+      top:60%;
+      left:5%;
+      transform:translateY(-50%);
+    }
+
 
     /* ====== Modal ====== */
+
     .modal-overlay{
       position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
       background:rgba(0,0,0,0.6);
       display:none;
       justify-content:center;
       align-items:center;
       z-index:999;
     }
+
     .modal{
       background:#111;
       border:2px solid #FFD93B;
@@ -95,6 +128,7 @@
       text-align:center;
       color:#FFD93B;
     }
+
     .modal button{
       margin:10px;
       padding:6px 16px;
@@ -103,123 +137,285 @@
       cursor:pointer;
       font-weight:bold;
     }
-    .btn-yes{ background:#FFD93B; color:#000; }
-    .btn-no{ background:#444; color:#FFD93B; }
+
+    .btn-yes{
+      background:#FFD93B;
+      color:#000;
+    }
+
+    .btn-no{
+      background:#444;
+      color:#FFD93B;
+    }
   </style>
 </head>
+
 <body>
+
+  <!-- ===== 購物車 ===== -->
+
   <div class="cart" onclick="showCart()">
-    <img src="../PT/cart_icon.png" alt="購物車圖示">
+    <img src="../PT/cart.png" alt="購物車圖示">
     장바구니
   </div>
+
+
   <div class="wrap">
+
     <!-- ===== 標題 SVG ===== -->
-    <svg class="title-svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid meet">
+
+    <svg
+      class="title-svg"
+      viewBox="0 0 1200 300"
+      preserveAspectRatio="xMidYMid meet"
+    >
+
       <defs>
-        <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="0%">
+
+        <linearGradient
+          id="rainbow"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="0%"
+        >
+
           <stop offset="0%" stop-color="#ff3b3b">
-            <animate attributeName="stop-color" values="#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff;#b33bff;#ff3b3b" dur="6s" repeatCount="indefinite" />
+            <animate
+              attributeName="stop-color"
+              values="#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff;#b33bff;#ff3b3b"
+              dur="6s"
+              repeatCount="indefinite"
+            />
           </stop>
+
           <stop offset="50%" stop-color="#3bb8ff">
-            <animate attributeName="stop-color" values="#3bb8ff;#b33bff;#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff" dur="6s" repeatCount="indefinite" />
+            <animate
+              attributeName="stop-color"
+              values="#3bb8ff;#b33bff;#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff"
+              dur="6s"
+              repeatCount="indefinite"
+            />
           </stop>
+
           <stop offset="100%" stop-color="#b33bff">
-            <animate attributeName="stop-color" values="#b33bff;#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff;#b33bff" dur="6s" repeatCount="indefinite" />
+            <animate
+              attributeName="stop-color"
+              values="#b33bff;#ff3b3b;#ff9a3b;#ffd93b;#3bff7a;#3bb8ff;#b33bff"
+              dur="6s"
+              repeatCount="indefinite"
+            />
           </stop>
+
         </linearGradient>
-        <path id="arcPath" d="M60,190 C300,60 900,60 1140,190" fill="none"/>
+
+
+        <path
+          id="arcPath"
+          d="M60,190 C300,60 900,60 1140,190"
+          fill="none"
+        />
+
+
         <filter id="glow">
-          <feGaussianBlur stdDeviation="4" result="blur"/>
+
+          <feGaussianBlur
+            stdDeviation="4"
+            result="blur"
+          />
+
           <feMerge>
+
             <feMergeNode in="blur"/>
+
             <feMergeNode in="SourceGraphic"/>
+
           </feMerge>
+
         </filter>
+
       </defs>
-      <text font-family="MingLiU, PMingLiU, 新細明體, serif" font-size="120" font-weight="700" text-anchor="middle" filter="url(#glow)" fill="url(#rainbow)">
-        <textPath href="#arcPath" startOffset="50%" dominant-baseline="middle" letter-spacing="2">
+
+
+      <text
+        font-family="MingLiU, PMingLiU, 新細明體, serif"
+        font-size="120"
+        font-weight="700"
+        text-anchor="middle"
+        filter="url(#glow)"
+        fill="url(#rainbow)"
+      >
+
+        <textPath
+          href="#arcPath"
+          startOffset="50%"
+          dominant-baseline="middle"
+          letter-spacing="2"
+        >
           우주 쇼핑몰
         </textPath>
+
       </text>
+
     </svg>
 
+
     <!-- ===== 商品 ===== -->
+
     <div class="products">
-      <div class="centered">몰건</div>
-      <div onclick="openConfirmModal('혈욕조 - ₩29,999,999')">혈욕조 - ₩29,999,999</div>
-      <div onclick="openConfirmModal('신비한 양초 키트 - ₩19,999,999')">신비한 양초 키트 - ₩19,999,999</div>
-      <div onclick="openConfirmModal('백설공주의 사과 - ₩11,999,999')">백설공주의 사과 - ₩11,999,999</div>
-      <div onclick="openConfirmModal('우리가 도움！ - ₩66,666,666')">우리가 도움！ - ₩66,666,666</div>
+
+      <div class="centered">
+        몰건
+      </div>
+
+
+      <div onclick="openConfirmModal('혈욕조 - ₩29,999,999')">
+        혈욕조 - ₩29,999,999
+      </div>
+
+
+      <div onclick="openConfirmModal('신비한 양초 키트 - ₩19,999,999')">
+        신비한 양초 키트 - ₩19,999,999
+      </div>
+
+
+      <div onclick="openConfirmModal('백설공주의 사과 - ₩11,999,999')">
+        백설공주의 사과 - ₩11,999,999
+      </div>
+
+
+      <div onclick="openConfirmModal('우리가 도움！ - ₩66,666,666')">
+        우리가 도움！ - ₩66,666,666
+      </div>
+
+
       <br>
-      <div>※할인※</div>
-      <div onclick="openConfirmModal('흡혈 식기 - ₩7,999,999')">※흡혈 식기 - <span class="special">₩7,999,999</span></div>
-      <div>　　　　　　　<s>₩14,999,999</s></div>
+
+
+      <div class="centered">
+        ※할인※
+      </div>
+
+
+      <div onclick="openConfirmModal('흡혈 식기 - ₩7,999,999')">
+        ※흡혈 식기 -
+        <span class="special">₩7,999,999</span>
+      </div>
+
+
+      <div>
+        　　　　　　　<s>₩14,999,999</s>
+      </div>
+
     </div>
+
   </div>
 
-  <!-- 浮動圖片 -->
-  <img src="../PT/alien.png" alt="外星人" class="floating-img img1">
-  <img src="../PT/planet.png" alt="行星" class="floating-img img3">
+
+  <!-- ===== 浮動圖片 ===== -->
+
+  <img
+    src="../PT/alien.png"
+    alt="外星人"
+    class="floating-img img1"
+  >
+
+  <img
+    src="../PT/planet.png"
+    alt="行星"
+    class="floating-img img3"
+  >
+
 
   <!-- ===== Modal ===== -->
-  <div id="modal-overlay" class="modal-overlay">
+
+  <div
+    id="modal-overlay"
+    class="modal-overlay"
+  >
+
     <div class="modal">
-      <div id="modal-text">內容</div>
+
+      <div id="modal-text">
+        內容
+      </div>
+
       <div id="modal-buttons"></div>
+
     </div>
+
   </div>
 
+
   <script>
+
     let currentItem = '';
+
 
     // 開啟「加入購物車」確認視窗
     function openConfirmModal(item){
+
       currentItem = item;
-      document.getElementById('modal-text').innerText = '장바구니에 추가하시겠습니까?: ' + item;
+
+      document.getElementById('modal-text').innerHTML =
+        '장바구니에 추가하시겠습니까?<br>' + item;
+
       document.getElementById('modal-buttons').innerHTML = `
         <button class="btn-yes" onclick="confirmAdd()">YES</button>
         <button class="btn-no" onclick="closeModal()">NO</button>
       `;
+
       document.getElementById('modal-overlay').style.display = 'flex';
     }
+
 
     // 開啟「加入成功」提示
     function openSuccessModal(item){
-      document.getElementById('modal-text').innerText = item + ' 장바구니에 추가되었습니다！';
+
+      document.getElementById('modal-text').innerHTML =
+        item + '<br>장바구니에 추가되었습니다！';
+
       document.getElementById('modal-buttons').innerHTML = `
         <button class="btn-no" onclick="closeModal()">Close</button>
       `;
+
       document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-// 顯示購物車
-function showCart(){
-  document.getElementById('modal-text').innerHTML = `
-    這不是真正的宇宙購物中心，<br>
-    你不可能在這裡看到任何商品<br>
-    如果你想認識一下本網站製作者：
-    <a href="https://www.facebook.com/XROBIST357"
-       target="_blank"
-       rel="noopener noreferrer">點我前往FB</a>
-  `;
 
-  document.getElementById('modal-buttons').innerHTML = `
-    <button class="btn-no" onclick="closeModal()">Close</button>
-  `;
+    // 顯示購物車
+    function showCart(){
 
-  document.getElementById('modal-overlay').style.display = 'flex';
-}
+      document.getElementById('modal-text').innerHTML =
+        '這不是真正的宇宙購物中心，<br>你不可能在這裡看到任何商品' +
+        '<br>如果你想認識一下本網站製作者：' +
+        '<a href="https://www.facebook.com/XROBIST357" target="_blank">點我前往FB</a>';
+
+      document.getElementById('modal-buttons').innerHTML = `
+        <button class="btn-no" onclick="closeModal()">Close</button>
+      `;
+
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
 
     // 確認加入購物車
     function confirmAdd(){
+
       closeModal();
+
       openSuccessModal(currentItem);
     }
 
+
     // 關閉彈窗
     function closeModal(){
+
       document.getElementById('modal-overlay').style.display = 'none';
+
     }
+
   </script>
+
 </body>
 </html>
