@@ -23,6 +23,8 @@
 
     .wrap{
       min-height:100%;
+      position:relative;
+      z-index:2;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -85,6 +87,8 @@
       position:absolute;
       height:auto;
       max-width:40vw;
+      z-index:1;
+      pointer-events:none;
     }
 
     .img1{
@@ -94,9 +98,11 @@
     }
 
     .img2{
-      width:24vw;
-      top:-5vh;
-      right:38%;
+      width:clamp(110px, 24vw, 360px);
+      position:fixed;
+      top:0;
+      left:0;
+      will-change:transform;
     }
 
     .img3{
@@ -241,6 +247,40 @@
     alt="行星"
     class="floating-img img3"
   >
+
+  <script>
+    // 讓 UFO 像螢幕保護程式一樣在視窗四邊反彈。
+    const ufo = document.querySelector('.img2');
+    let x = Math.random() * Math.max(0, innerWidth - ufo.offsetWidth);
+    let y = Math.random() * Math.max(0, innerHeight - ufo.offsetHeight);
+    let vx = 150;
+    let vy = 110;
+    let previousTime = performance.now();
+
+    function moveUfo(now) {
+      const seconds = Math.min((now - previousTime) / 1000, 0.05);
+      previousTime = now;
+      const maxX = Math.max(0, innerWidth - ufo.offsetWidth);
+      const maxY = Math.max(0, innerHeight - ufo.offsetHeight);
+
+      x += vx * seconds;
+      y += vy * seconds;
+
+      if (x <= 0 || x >= maxX) {
+        x = Math.max(0, Math.min(x, maxX));
+        vx *= -1;
+      }
+      if (y <= 0 || y >= maxY) {
+        y = Math.max(0, Math.min(y, maxY));
+        vy *= -1;
+      }
+
+      ufo.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      requestAnimationFrame(moveUfo);
+    }
+
+    requestAnimationFrame(moveUfo);
+  </script>
 
 </body>
 </html>
