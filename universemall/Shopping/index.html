@@ -24,6 +24,8 @@
 
     .wrap{
       width:100%;
+      position:relative;
+      z-index:2;
       text-align:center;
       padding:20px;
       box-sizing:border-box;
@@ -88,6 +90,8 @@
       position:absolute;
       height:auto;
       max-width:40vw;
+      z-index:1;
+      pointer-events:none;
     }
 
     .img1{
@@ -102,7 +106,6 @@
       left:5%;
       transform:translateY(-50%);
     }
-
 
     /* ====== Modal ====== */
 
@@ -326,7 +329,6 @@
     class="floating-img img3"
   >
 
-
   <!-- ===== Modal ===== -->
 
   <div
@@ -350,7 +352,6 @@
   <script>
 
     let currentItem = '';
-
 
     // 開啟「加入購物車」確認視窗
     function openConfirmModal(item){
