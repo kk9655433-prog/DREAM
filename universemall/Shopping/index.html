@@ -7,6 +7,12 @@
   <link rel="icon" type="image/png" href="../PT/alien.png">
 
   <style>
+    @font-face{
+      font-family:"SamlipHopangcheOutline";
+      src:url('./SDSamliphopangcheOutline.otf') format('opentype');
+      font-display:swap;
+    }
+
     html,body{
       height:100%;
       margin:0;
@@ -45,8 +51,7 @@
       font-size:clamp(18px, 2.6vh, 28px);
       line-height:1.6;
       font-weight:700;
-      text-align:left;
-      max-width:600px;
+      width:min(92vw, 760px);
     }
 
     .products .centered{
@@ -55,14 +60,68 @@
       font-size:clamp(28px, 4vh, 40px);
     }
 
-    .special{
-      color:#FF4444;
+    .product-row,
+    .cart-row,
+    .cart-total,
+    .discount-total{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) max-content;
+      gap:18px;
+      align-items:baseline;
     }
 
-    .old-price{
-      text-decoration:line-through;
-      color:#bbb;
+    .product-row{
+      cursor:pointer;
+      padding:2px 8px;
+      border-radius:5px;
+    }
+
+    .product-row:hover{
+      background:rgba(255,217,59,0.13);
+    }
+
+    .price{
+      text-align:right;
+      white-space:nowrap;
+      font-variant-numeric:tabular-nums;
+    }
+
+    .star-wrap{
+      position:relative;
+      display:inline-block;
+      cursor:help;
+    }
+
+    .star-tooltip{
+      position:absolute;
+      left:50%;
+      bottom:calc(100% + 8px);
+      transform:translateX(-50%);
+      display:none;
+      width:max-content;
+      max-width:80vw;
+      padding:7px 11px;
+      border:2px solid #2764d8;
+      border-radius:4px;
+      background:#fff;
+      color:#1554c0;
+      font-family:"MingLiU", "PMingLiU", serif;
+      font-size:16px;
+      line-height:1.3;
+      z-index:20;
+      box-shadow:3px 3px 0 rgba(0,0,0,.45);
+    }
+
+    .star-wrap:hover .star-tooltip{
       display:block;
+    }
+
+    .vip-message{
+      margin-top:34px;
+      text-align:center;
+      font-family:"SamlipHopangcheOutline", "MingLiU", "PMingLiU", serif;
+      font-size:clamp(22px, 3.2vh, 34px);
+      line-height:1.45;
     }
 
     .cart{
@@ -127,7 +186,9 @@
       background:#111;
       border:2px solid #FFD93B;
       border-radius:8px;
-      max-width:400px;
+      width:min(88vw, 620px);
+      max-height:82vh;
+      overflow:auto;
       padding:20px;
       text-align:center;
       color:#FFD93B;
@@ -150,6 +211,24 @@
     .btn-no{
       background:#444;
       color:#FFD93B;
+    }
+
+    .cart-list{
+      margin:16px 0;
+      text-align:left;
+      line-height:1.55;
+    }
+
+    .cart-total{
+      margin-top:12px;
+      padding-top:8px;
+      border-top:1px solid #FFD93B;
+    }
+
+    .discount-total{
+      margin-top:8px;
+      color:#ff4444;
+      font-weight:bold;
     }
   </style>
 </head>
@@ -269,46 +348,45 @@
     <div class="products">
 
       <div class="centered">
-        몰건
+        물건 목록
       </div>
 
-
-      <div onclick="openConfirmModal('혈욕조 - ₩29,999,999')">
-        혈욕조 - ₩29,999,999
+      <div class="product-row" onclick="openConfirmModal('happy')">
+        <span>해피 메이커</span>
+        <span class="price">₩27,999,999
+          <span class="star-wrap" onclick="event.stopPropagation()">★
+            <span class="star-tooltip">★ 이전에 샀던 물건 비슷한!</span>
+          </span>
+        </span>
       </div>
 
-
-      <div onclick="openConfirmModal('신비한 양초 키트 - ₩19,999,999')">
-        신비한 양초 키트 - ₩19,999,999
+      <div class="product-row" onclick="openConfirmModal('candy')">
+        <span>노스텔지어 캔디</span>
+        <span class="price">₩12,999,999
+          <span class="star-wrap" onclick="event.stopPropagation()">★
+            <span class="star-tooltip">★ 이전에 샀던 물건 비슷한!</span>
+          </span>
+        </span>
       </div>
 
-
-      <div onclick="openConfirmModal('백설공주의 사과 - ₩11,999,999')">
-        백설공주의 사과 - ₩11,999,999
+      <div class="product-row" onclick="openConfirmModal('wrapper')">
+        <span>포장지 12B357나</span>
+        <span class="price">₩9,999,999</span>
       </div>
 
-
-      <div onclick="openConfirmModal('우리가 도움！ - ₩66,666,666')">
-        우리가 도움！ - ₩66,666,666
+      <div class="product-row" onclick="openConfirmModal('book')">
+        <span>네크로노미콘</span>
+        <span class="price">₩49,999,999</span>
       </div>
 
-
-      <br>
-
-
-      <div class="centered">
-        ※할인※
+      <div class="product-row" onclick="openConfirmModal('help')">
+        <span>우리가 도움!</span>
+        <span class="price">₩66,666,666</span>
       </div>
 
-
-      <div onclick="openConfirmModal('흡혈 식기 - ₩7,999,999')">
-        ※흡혈 식기 -
-        <span class="special">₩7,999,999</span>
-      </div>
-
-
-      <div>
-        　　　　　　　<s>₩14,999,999</s>
+      <div class="vip-message">
+        정말 1억 이상 사면 20% 할인!<br>
+        우주 쇼핑몰 VIP 된다!
       </div>
 
     </div>
@@ -352,69 +430,109 @@
 
   <script>
 
-    let currentItem = '';
+    const products = {
+      happy:   { name:'해피 메이커',       price:27999999 },
+      candy:   { name:'노스텔지어 캔디',   price:12999999 },
+      wrapper: { name:'포장지 12B357나',   price:9999999 },
+      book:    { name:'네크로노미콘',       price:49999999 },
+      help:    { name:'우리가 도움!',       price:66666666 }
+    };
 
-    // 開啟「加入購物車」確認視窗
-    function openConfirmModal(item){
+    const cartItems = [];
+    let currentProductId = '';
 
-      currentItem = item;
+    function won(value){
+      return '₩' + value.toLocaleString('en-US');
+    }
 
+    function openModal(){
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function openConfirmModal(productId){
+      currentProductId = productId;
+      const product = products[productId];
       document.getElementById('modal-text').innerHTML =
-        '장바구니에 추가하시겠습니까?<br>' + item;
-
+        '장바구니에 추가하시겠습니까?<br>' +
+        product.name + ' - ' + won(product.price);
       document.getElementById('modal-buttons').innerHTML = `
         <button class="btn-yes" onclick="confirmAdd()">YES</button>
         <button class="btn-no" onclick="closeModal()">NO</button>
       `;
-
-      document.getElementById('modal-overlay').style.display = 'flex';
+      openModal();
     }
 
-
-    // 開啟「加入成功」提示
-    function openSuccessModal(item){
-
+    function confirmAdd(){
+      const product = products[currentProductId];
+      if (!cartItems.includes(currentProductId)) {
+        cartItems.push(currentProductId);
+      }
       document.getElementById('modal-text').innerHTML =
-        item + '<br>장바구니에 추가되었습니다！';
-
+        product.name + '<br>장바구니에 추가되었습니다!';
       document.getElementById('modal-buttons').innerHTML = `
-        <button class="btn-no" onclick="closeModal()">Close</button>
+        <button class="btn-no" onclick="closeModal()">닫기</button>
       `;
-
-      document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-
-    // 顯示購物車
     function showCart(){
+      if (cartItems.length === 0) {
+        document.getElementById('modal-text').innerHTML = '장바구니가 비어 있습니다.';
+        document.getElementById('modal-buttons').innerHTML = `
+          <button class="btn-no" onclick="closeModal()">닫기</button>
+        `;
+        openModal();
+        return;
+      }
 
+      const total = cartItems.reduce(
+        (sum, productId) => sum + products[productId].price,
+        0
+      );
+      const qualifiesForDiscount = total >= 100000000;
+      const finalTotal = qualifiesForDiscount ? Math.floor(total * 0.8) : total;
+      const itemRows = cartItems.map(productId => {
+        const product = products[productId];
+        return `
+          <div class="cart-row">
+            <span>${product.name} -</span>
+            <span class="price">${won(product.price)}</span>
+          </div>`;
+      }).join('');
+      const discountRow = qualifiesForDiscount ? `
+        <div class="discount-total">
+          <span>※할인했다!※ :</span>
+          <span class="price">${finalTotal.toLocaleString('en-US')}</span>
+        </div>` : '';
+
+      document.getElementById('modal-text').innerHTML = `
+        <div>구매를 확정하시겠습니까?</div>
+        <div class="cart-list">
+          ${itemRows}
+          <div class="cart-total">
+            <span>=</span>
+            <span class="price">${won(total)}</span>
+          </div>
+          ${discountRow}
+        </div>`;
+      document.getElementById('modal-buttons').innerHTML = `
+        <button class="btn-yes" onclick="completePurchase()">구매 확정</button>
+        <button class="btn-no" onclick="closeModal()">취소</button>
+      `;
+      openModal();
+    }
+
+    function completePurchase(){
       document.getElementById('modal-text').innerHTML =
-        '這不是真正的宇宙購物中心，<br>你不可能在這裡看到任何商品' +
+        '這不是真正的宇宙購物中心，<br>你不可能在這裡購買任何商品' +
         '<br>如果你想認識一下本網站製作者：' +
         '<a href="https://www.facebook.com/XROBIST357" target="_blank">點我前往FB</a>';
-
       document.getElementById('modal-buttons').innerHTML = `
-        <button class="btn-no" onclick="closeModal()">Close</button>
+        <button class="btn-no" onclick="closeModal()">닫기</button>
       `;
-
-      document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-
-    // 確認加入購物車
-    function confirmAdd(){
-
-      closeModal();
-
-      openSuccessModal(currentItem);
-    }
-
-
-    // 關閉彈窗
     function closeModal(){
-
       document.getElementById('modal-overlay').style.display = 'none';
-
     }
 
   </script>
